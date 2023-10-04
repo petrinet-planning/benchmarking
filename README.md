@@ -28,7 +28,7 @@ python3 downward/fast-downward.py "benchmarks/autoscale-benchmarks/21.11-optimal
 
 Grounded Translation:
 ```sh
-
+python3 planning-via-unfolding/src/fast-downward.py --keep-sas-file --mole max "benchmarks/autoscale-benchmarks/21.11-optimal-strips/blocksworld/domain.pddl" "benchmarks/autoscale-benchmarks/21.11-optimal-strips/blocksworld/p01.pddl" --goal --optimal
 ```
 
 Lifted Translation:
