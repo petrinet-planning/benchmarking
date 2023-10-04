@@ -1,0 +1,7 @@
+[submodule "colored-lifted-planning"]
+	path = colored-lifted-planning
+	url = https://github.com/petrinet-planning/colored-lifted-planning.git
+[submodule "planning-via-unfolding"]
+	path = planning-via-unfolding
+	url = https://github.com/petrinet-planning/planning-via-unfolding
+	branch = pnml
