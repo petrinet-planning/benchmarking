@@ -11,7 +11,7 @@ git submodule update --init --recursive
 ## Compiling
 On Linux, or Windows with WSL, run
 ```sh
-./build_all
+./build_all.sh
 ```
 
 For any compilation errors, consult the repo of each individual submodule.
