@@ -3,6 +3,7 @@
 ## Cloning
 ```sh
 git clone https://github.com/petrinet-planning/benchmarking.git
+cd benchmarking
 git submodule update --init --recursive
 ```
 
