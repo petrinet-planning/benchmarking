@@ -37,3 +37,7 @@ Lifted Translation:
 
 ```
 
+## Updating all dependencies
+```sh
+git submodule update --remote --recursive --merge
+```
