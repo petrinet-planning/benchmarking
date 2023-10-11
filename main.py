@@ -23,9 +23,16 @@ runners: list[BaseTestRunner] = [
     GroundedPlanningRunner("C:/Users/Henrik/Downloads/tapaal-4.0.0-win64/tapaal-4.0.0-win64/bin/verifypn64.exe")
 ]
 
-csv_writer = csv.writer(open ('out.csv', 'w'), delimiter=',', lineterminator='\n')
+
+csv_path = 'out.csv'
+csv_file = open(csv_path, 'w')
+csv_file.write("")
+csv_file.close()
 
 for test_case in tests:
+    csv_path = 'out.csv'
+    csv_file = open(csv_path, 'a')
+    csv_writer = csv.writer(csv_file, delimiter=',', lineterminator='\n')
     for i in range(1, 50):
         for runner in runners:
             test_id = "{}_{}_{:02}".format(runner.name, test_case.name, i)
@@ -35,4 +42,4 @@ for test_case in tests:
             result: QueryResult = runner.run(test_case)
             # print(result)
             csv_writer.writerow([runner.name, test_case.name, i, result.time_spent_on_verification, result.stats_expanded_states, result.stats_explored_states, result.stats_discovered_states])
-
+    csv_file.close()
