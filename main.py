@@ -1,6 +1,8 @@
 import os.path
+import csv
 
-from test_runner import TestCase, BaseTestRunner, LiftedPlanningRunner
+from test_runner import TestCase, BaseTestRunner, LiftedPlanningRunner, GroundedPlanningRunner
+from test_runner.tapaal_caller import QueryResult
 
 blocksworld_path = os.path.abspath("./benchmarks/autoscale-benchmarks/21.11-agile-strips/blocksworld")
 blocksworld_domain_path = os.path.join(blocksworld_path, "domain.pddl")
@@ -17,16 +19,20 @@ tests: list[TestCase] = [
 ]
 
 runners: list[BaseTestRunner] = [
-    LiftedPlanningRunner("C:/Users/Henrik/Downloads/tapaal-4.0.0-win64/tapaal-4.0.0-win64/bin/verifypn64.exe")
+    LiftedPlanningRunner("C:/Users/Henrik/Downloads/tapaal-4.0.0-win64/tapaal-4.0.0-win64/bin/verifypn64.exe"),
+    GroundedPlanningRunner("C:/Users/Henrik/Downloads/tapaal-4.0.0-win64/tapaal-4.0.0-win64/bin/verifypn64.exe")
 ]
 
+csv_writer = csv.writer(open ('out.csv', 'w'), delimiter=',', lineterminator='\n')
 
 for test_case in tests:
     for i in range(1, 50):
         for runner in runners:
+            test_id = "{}_{}_{:02}".format(runner.name, test_case.name, i)
             result_path = "./results/{}_{}_{:02}.log".format(runner.name, test_case.name, i)
-            # print(result_path)
+            print(result_path)
 
-            result = runner.run(test_case)
-            print(result)
+            result: QueryResult = runner.run(test_case)
+            # print(result)
+            csv_writer.writerow([runner.name, test_case.name, i, result.time_spent_on_verification, result.stats_expanded_states, result.stats_explored_states, result.stats_discovered_states])
 
