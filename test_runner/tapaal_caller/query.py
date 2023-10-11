@@ -2,9 +2,9 @@ import subprocess
 from asyncio import Future
 from typing import Optional, IO
 
-from search_strategies import SearchStrategies
-from engine import Engine
-from query_result import QueryResult
+from test_runner.tapaal_caller.search_strategies import SearchStrategies
+from test_runner.tapaal_caller.engine import Engine
+from test_runner.tapaal_caller.query_result import QueryResult
 
 
 class Query:

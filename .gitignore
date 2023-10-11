@@ -163,3 +163,5 @@ sas_plan
 out.pnml
 out.q
 output.sas
+petrinet.pnml
+query.xml

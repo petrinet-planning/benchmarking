@@ -1,4 +1,4 @@
 #! /bin/bash
-cd planning-via-unfolding/src/search
+cd ./test_runner/systems/grounded_translation/src/search
 make
-cd ../../..
+cd ../../../../..

@@ -1,4 +1,4 @@
 #! /bin/bash
-cd downward
+cd ./test_runner/systems/downward
 python3 ./build.py
-cd ..
+cd ../../..
