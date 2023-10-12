@@ -167,3 +167,4 @@ petrinet.pnml
 query.xml
 out.csv
 out.xml
+results/*

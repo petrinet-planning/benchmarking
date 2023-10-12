@@ -1,5 +1,6 @@
+import os
 import os.path
-import csv
+import pickle
 
 from test_runner import TestCase, BaseTestRunner, LiftedPlanningRunner, GroundedPlanningRunner
 from test_runner.tapaal_caller import QueryResult
@@ -21,43 +22,25 @@ tests: list[TestCase] = [
 # engine_path = "C:/Users/Henrik/Downloads/tapaal-4.0.0-win64/tapaal-4.0.0-win64/bin/verifypn64.exe"  # Windows
 engine_path = "/mnt/c/Users/Henrik/Downloads/tapaal-4.0.0-linux64/tapaal-4.0.0-linux64/bin/verifypn64"  # Linux
 runners: list[BaseTestRunner] = [
-    LiftedPlanningRunner(engine_path, "Default Parameters", 50, ["--k-bound", "50", "--search-strategy", "RPFS", "--reduction", "1", "--ctl-algorithm", "czero", "--xml-queries", "1", "--disable-partitioning"]),
-    GroundedPlanningRunner(engine_path, "Default Parameters", 5, ["--k-bound", "50", "--search-strategy", "RPFS", "--reduction", "1", "--ctl-algorithm", "czero", "--xml-queries", "1", "--disable-partitioning"])
+    LiftedPlanningRunner(engine_path, "Default Parameters", 10, ["--k-bound", "200", "--search-strategy", "RPFS", "--reduction", "1", "--ctl-algorithm", "czero", "--xml-queries", "1", "--disable-partitioning"]),
+    GroundedPlanningRunner(engine_path, "Default Parameters", 10, ["--k-bound", "200", "--search-strategy", "RPFS", "--reduction", "1", "--ctl-algorithm", "czero", "--xml-queries", "1", "--disable-partitioning"])
 ]
 
 
-csv_path = 'out_fixed.csv'
-csv_file = open(csv_path, 'w')
-csv_file.write("")
-csv_file.close()
+
+results_path = "./results/"
+os.makedirs(os.path.dirname(results_path), exist_ok=True)
+
+results: dict[TestCase, dict[BaseTestRunner, list[QueryResult]]] = {}
 
 for test_case in tests:
-    csv_file = open(csv_path, 'a')
-    csv_writer = csv.writer(csv_file, delimiter=',', lineterminator='\n')
-    
-    experiments_done = False
-    i = 0
-    while not experiments_done:  # Loop until i exceeds all runner sample-sizes
-        experiments_done = True
-        for runner in runners:
-            if runner.needed_sample_size < i:
-                continue
-            experiments_done = False
+    results[test_case] = dict()
+    for runner in runners:
+        results[test_case][runner] = list()
+        for i in range(0, runner.needed_sample_size):
+            print("{}_{}_{:02}".format(runner.translation_name, test_case.name, i))
+            results[test_case][runner].append(runner.run(test_case))
 
-            test_id = "{}_{}_{:02}".format(runner.translation_name, test_case.name, i)
-            print(test_id)
 
-            result: QueryResult = runner.run(test_case)
-            
-            csv_writer.writerow([
-                runner.translation_name, 
-                test_case.name,
-                i,
-                result.output["time_verification"],
-                result.output["stats_expanded_states"],
-                result.output["stats_explored_states"],
-                result.output["stats_discovered_states"]
-            ])
-        i += 1
-
-    csv_file.close()
+    with open(os.path.join(results_path, f"{test_case.name}.pickle"), "wb") as f:
+        pickle.dump(results, f)
