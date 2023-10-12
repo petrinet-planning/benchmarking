@@ -19,18 +19,19 @@ class BaseTapaalTestRunner(BaseTestRunner):
 
     def run(self, test_case: TestCase) -> QueryResult:
 
-        translation_time = time.time()
+        time_translation = time.time()
         self.do_translation(test_case)
-        translation_time = time.time() - translation_time
+        time_translation = time.time() - time_translation
 
-        tapaal_time = time.time()
+        time_tapaal = time.time()
         tapaal_stdout_full = self.do_tapaal()
-        tapaal_time = time.time() - tapaal_time
+        time_tapaal = time.time() - time_tapaal
 
         query_output_parsed = QueryResult.parse(tapaal_stdout_full)
 
-        query_output_parsed.translation_time = translation_time
-        query_output_parsed.tapaal_time = tapaal_time
+        query_output_parsed.time_translation = time_translation
+        query_output_parsed.time_tapaal = time_tapaal
+        query_output_parsed.time_total = time_tapaal
 
         return query_output_parsed
     
