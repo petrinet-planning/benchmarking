@@ -34,7 +34,7 @@ class QueryResult:
     def parse(query_output: str) -> "QueryResult":
         self = QueryResult()
 
-        self.rwstats_colored_pre = regex_rwstats_colored_pre.search(query_output)[1]
+        # self.rwstats_colored_pre = regex_rwstats_colored_pre.search(query_output)[1]
 
         self.removed_transitions = int(regex_removed_transitions.search(query_output)[1])
         self.removed_places = int(regex_removed_places.search(query_output)[1])

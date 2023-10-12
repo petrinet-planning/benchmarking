@@ -18,19 +18,20 @@ tests: list[TestCase] = [
     TestCase("blocksworld_08", blocksworld_domain_path, os.path.join(blocksworld_path, "p08.pddl"))
 ]
 
+# engine_path = "C:/Users/Henrik/Downloads/tapaal-4.0.0-win64/tapaal-4.0.0-win64/bin/verifypn64.exe"  # Windows
+engine_path = "/mnt/c/Users/Henrik/Downloads/tapaal-4.0.0-linux64/tapaal-4.0.0-linux64/bin/verifypn64"  # Linux
 runners: list[BaseTestRunner] = [
-    LiftedPlanningRunner("C:/Users/Henrik/Downloads/tapaal-4.0.0-win64/tapaal-4.0.0-win64/bin/verifypn64.exe"),
-    GroundedPlanningRunner("C:/Users/Henrik/Downloads/tapaal-4.0.0-win64/tapaal-4.0.0-win64/bin/verifypn64.exe")
+    LiftedPlanningRunner(engine_path),
+    GroundedPlanningRunner(engine_path)
 ]
 
 
-csv_path = 'out.csv'
+csv_path = 'out_fixed.csv'
 csv_file = open(csv_path, 'w')
 csv_file.write("")
 csv_file.close()
 
 for test_case in tests:
-    csv_path = 'out.csv'
     csv_file = open(csv_path, 'a')
     csv_writer = csv.writer(csv_file, delimiter=',', lineterminator='\n')
     for i in range(1, 50):
