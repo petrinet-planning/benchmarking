@@ -1,23 +1,20 @@
 import re
 import subprocess
 
-from . import BaseTestRunner, TestCase
-from .systems.colored_translation.main import translate_problem
+from test_runner import TestCase
 
-from .tapaal_caller import Query, QueryResult, Engine
+from . import TestCase
+from .base_tapaal_runner import BaseTapaalTestRunner
+from .tapaal_caller import Query
 
 
 regex_find_place_value_in_query = re.compile("((?P<place>\w+) >= (?P<tokens>\d+))")
 
-class GroundedPlanningRunner(BaseTestRunner):
-    tapaal_engine: Engine
-
-    def __init__(self, engine_path: str):
-        super().__init__("gnadGjoel")
-        self.tapaal_engine = Engine(engine_path)
-
-    def run(self, test_case: TestCase) -> QueryResult:
-
+class GroundedPlanningRunner(BaseTapaalTestRunner):
+    def __init__(self, tapaal_engine_path: str, description: str, base_parameters: list[str] = []):
+        super().__init__("GnadGjoel", description, tapaal_engine_path, base_parameters)
+    
+    def do_translation(self, test_case: TestCase) -> None:
         p = subprocess.Popen([
             "./test_runner/systems/grounded_translation/src/fast-downward.py",
             "--keep-sas-file",
@@ -26,18 +23,15 @@ class GroundedPlanningRunner(BaseTestRunner):
             test_case.problem_path,
             "--goal", 
             "--optimal"
-        ],
+            ],
             stdout=subprocess.PIPE,
-            stderr=subprocess.STDOUT)
-
+            stderr=subprocess.STDOUT
+        )
         self.convert_query("out.q", "out.xml")
 
-        query = Query(pnml_path="out.pnml", query_path="out.xml", k_bound=50)
-        query_output = query.run(self.tapaal_engine)
-
-        query_output_parsed = QueryResult.parse(query_output)
-
-        return query_output_parsed
+    def do_tapaal(self) -> str:
+        query = Query(pnml_path="out.pnml", query_path="out.xml", parameters=self.base_parameters)
+        return query.run(self.tapaal_engine)
 
     def convert_query(self, query_path_from: str, query_path_to: str):
         # EF Atom_on_b1__b4_ >= 1 && Atom_on_b2__b1_ >= 1 && Atom_on_b4__b5_ >= 1 && Atom_on_b5__b3_ >= 1
@@ -71,5 +65,3 @@ class GroundedPlanningRunner(BaseTestRunner):
         output_query_file = open(query_path_to, "w")
         output_query_file.write(xml)
         output_query_file.close()
-
-

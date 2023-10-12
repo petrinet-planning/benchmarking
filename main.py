@@ -21,8 +21,8 @@ tests: list[TestCase] = [
 # engine_path = "C:/Users/Henrik/Downloads/tapaal-4.0.0-win64/tapaal-4.0.0-win64/bin/verifypn64.exe"  # Windows
 engine_path = "/mnt/c/Users/Henrik/Downloads/tapaal-4.0.0-linux64/tapaal-4.0.0-linux64/bin/verifypn64"  # Linux
 runners: list[BaseTestRunner] = [
-    LiftedPlanningRunner(engine_path),
-    GroundedPlanningRunner(engine_path)
+    LiftedPlanningRunner(engine_path, "Default Parameters", ["--k-bound", "50", "--search-strategy", "RPFS", "--reduction", "1", "--ctl-algorithm", "czero", "--xml-queries", "1", "--disable-partitioning"]),
+    GroundedPlanningRunner(engine_path, "Default Parameters", ["--k-bound", "50", "--search-strategy", "RPFS", "--reduction", "1", "--ctl-algorithm", "czero", "--xml-queries", "1", "--disable-partitioning"])
 ]
 
 
@@ -36,11 +36,11 @@ for test_case in tests:
     csv_writer = csv.writer(csv_file, delimiter=',', lineterminator='\n')
     for i in range(1, 50):
         for runner in runners:
-            test_id = "{}_{}_{:02}".format(runner.name, test_case.name, i)
-            result_path = "./results/{}_{}_{:02}.log".format(runner.name, test_case.name, i)
+            test_id = "{}_{}_{:02}".format(runner.translation_name, test_case.name, i)
+            result_path = "./results/{}_{}_{:02}.log".format(runner.translation_name, test_case.name, i)
             print(result_path)
 
             result: QueryResult = runner.run(test_case)
             # print(result)
-            csv_writer.writerow([runner.name, test_case.name, i, result.time_spent_on_verification, result.stats_expanded_states, result.stats_explored_states, result.stats_discovered_states])
+            csv_writer.writerow([runner.translation_name, test_case.name, i, result.time_spent_on_verification, result.stats_expanded_states, result.stats_explored_states, result.stats_discovered_states])
     csv_file.close()

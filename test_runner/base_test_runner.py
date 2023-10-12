@@ -2,10 +2,12 @@ from . import TestCase
 
 
 class BaseTestRunner:
-    name: str
+    translation_name: str
+    description: str
 
-    def __init__(self, name: str):
-        self.name = name
+    def __init__(self, translation_name: str, description: str):
+        self.translation_name = translation_name
+        self.description = description
 
     def run(self, test_case: TestCase) -> str:
         pass
