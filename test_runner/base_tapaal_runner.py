@@ -11,8 +11,8 @@ class BaseTapaalTestRunner(BaseTestRunner):
     description: str
     base_parameters: list[str]
 
-    def __init__(self, translation_name: str, description: str, tapaal_engine_path: str, base_parameters: list[str] = []):
-        super().__init__(translation_name, description)
+    def __init__(self, translation_name: str, description: str, needed_sample_size: int, tapaal_engine_path: str, base_parameters: list[str] = []):
+        super().__init__(translation_name, description, needed_sample_size)
         self.tapaal_engine = Engine(tapaal_engine_path)
         self.base_parameters = base_parameters
 

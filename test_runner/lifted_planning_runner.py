@@ -11,8 +11,8 @@ class LiftedPlanningRunner(BaseTapaalTestRunner):
     description: str
     base_parameters: list[str]
 
-    def __init__(self, tapaal_engine_path: str, description: str, base_parameters: list[str] = []):
-        super().__init__("colored", description, tapaal_engine_path, base_parameters)
+    def __init__(self, tapaal_engine_path: str, description: str, needed_sample_size: int, base_parameters: list[str] = []):
+        super().__init__("colored", description, needed_sample_size, tapaal_engine_path, base_parameters)
 
     def do_translation(self, test_case: TestCase) -> None:
         translate_problem(test_case.domain_path, test_case.problem_path, pnml_output_path="petrinet.pnml", pnml_query_path="query.xml")

@@ -11,8 +11,8 @@ from .tapaal_caller import Query
 regex_find_place_value_in_query = re.compile("((?P<place>\w+) >= (?P<tokens>\d+))")
 
 class GroundedPlanningRunner(BaseTapaalTestRunner):
-    def __init__(self, tapaal_engine_path: str, description: str, base_parameters: list[str] = []):
-        super().__init__("GnadGjoel", description, tapaal_engine_path, base_parameters)
+    def __init__(self, tapaal_engine_path: str, description: str, needed_sample_size: int, base_parameters: list[str] = []):
+        super().__init__("GnadGjoel", description, needed_sample_size, tapaal_engine_path, base_parameters)
     
     def do_translation(self, test_case: TestCase) -> None:
         p = subprocess.Popen([
