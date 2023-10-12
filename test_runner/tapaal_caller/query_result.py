@@ -47,6 +47,7 @@ class QueryResult:
 
     time_translation: float
     time_tapaal: float
+    time_total: float
 
     def __init__(self):
         self.output = dict()
