@@ -49,7 +49,15 @@ for test_case in tests:
 
             result: QueryResult = runner.run(test_case)
             
-            csv_writer.writerow([runner.translation_name, test_case.name, i, result.time_spent_on_verification, result.stats_expanded_states, result.stats_explored_states, result.stats_discovered_states])
+            csv_writer.writerow([
+                runner.translation_name, 
+                test_case.name,
+                i,
+                result.output["time_verification"],
+                result.output["stats_expanded_states"],
+                result.output["stats_explored_states"],
+                result.output["stats_discovered_states"]
+            ])
         i += 1
 
     csv_file.close()

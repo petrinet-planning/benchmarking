@@ -1,5 +1,6 @@
 
 
+import time
 from . import BaseTestRunner, TestCase
 from .systems.colored_translation.main import translate_problem
 
@@ -18,11 +19,18 @@ class BaseTapaalTestRunner(BaseTestRunner):
 
     def run(self, test_case: TestCase) -> QueryResult:
 
+        translation_time = time.time()
         self.do_translation(test_case)
+        translation_time -= time.time()
 
+        tapaal_time = time.time()
         tapaal_stdout_full = self.do_tapaal()
+        tapaal_time -= time.time()
 
         query_output_parsed = QueryResult.parse(tapaal_stdout_full)
+
+        query_output_parsed.translation_time = translation_time
+        query_output_parsed.tapaal_time = tapaal_time
 
         return query_output_parsed
     
