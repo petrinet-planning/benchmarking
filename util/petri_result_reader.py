@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import os
 
 
-df = pd.read_csv('petri_result.csv', names=['runner_name', 'case_name', 'index', 'time', 'expanded_states', 'explored_states', 'discovered_states'])
+df = pd.read_csv('petri_results.csv', names=['runner_name', 'case_name', 'index', 'time', 'expanded_states', 'explored_states', 'discovered_states'])
 
 pairs = df[['runner_name', "case_name"]].drop_duplicates().values
 
@@ -22,7 +22,7 @@ for _, test_case in pairs:
         # Calculate the median and average time for each runner
         median_time = subset['time'].median()
         average_time = subset['time'].mean()
-        stats.append(f'Runner: {runner}\nMedian Time: {median_time:.2f}\nAverage Time: {average_time:.2f}\n')
+        stats.append(f'Runner: {runner}\nMedian Time: {median_time:.4f}\nAverage Time: {average_time:.4f}\n')
   
     plt.title(f'Density Plot for Problem: {test_case}')
     plt.xlabel('Time Spent on Verification')
@@ -56,7 +56,7 @@ for runner, test_case in pairs:
     average_time = subset['time'].mean()
 
     # Display these in a box on the upper right corner of each plot
-    textstr = f'Median Time: {median_time:.2f}\nAverage Time: {average_time:.2f}'
+    textstr = f'Median Time: {median_time:.4f}\nAverage Time: {average_time:.4f}'
     props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
     plt.gca().text(0.95, 0.95, textstr, transform=plt.gca().transAxes, fontsize=10,
                    verticalalignment='top', horizontalalignment='right', bbox=props)
