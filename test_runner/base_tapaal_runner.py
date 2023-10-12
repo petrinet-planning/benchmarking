@@ -21,11 +21,11 @@ class BaseTapaalTestRunner(BaseTestRunner):
 
         translation_time = time.time()
         self.do_translation(test_case)
-        translation_time -= time.time()
+        translation_time = time.time() - translation_time
 
         tapaal_time = time.time()
         tapaal_stdout_full = self.do_tapaal()
-        tapaal_time -= time.time()
+        tapaal_time = time.time() - tapaal_time
 
         query_output_parsed = QueryResult.parse(tapaal_stdout_full)
 
