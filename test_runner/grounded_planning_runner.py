@@ -16,6 +16,7 @@ class GroundedPlanningRunner(BaseTapaalTestRunner):
     
     def do_translation(self, test_case: TestCase) -> None:
         p = subprocess.Popen([
+            "python3",
             "./test_runner/systems/grounded_translation/src/fast-downward.py",
             "--keep-sas-file",
             "--mole", "max",
