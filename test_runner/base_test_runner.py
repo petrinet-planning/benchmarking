@@ -13,3 +13,7 @@ class BaseTestRunner:
 
     def run(self, test_case: TestCase) -> str:
         pass
+
+
+    def __repr__(self) -> str:
+        return f"{self.translation_name}({self.description})"

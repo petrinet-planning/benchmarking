@@ -10,3 +10,6 @@ class TestCase:
         self.name = name
         self.domain_path = domain_path
         self.problem_path = problem_path
+
+    def __repr__(self) -> str:
+        return self.name

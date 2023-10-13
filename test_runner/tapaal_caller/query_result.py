@@ -65,3 +65,6 @@ class QueryResult:
                 self.output[name] = expected_type(found_value[1])
 
         return self
+
+    def __repr__(self) -> str:
+        return f"QueryResult(time_total={self.time_total})"
