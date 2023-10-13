@@ -26,14 +26,11 @@ runners: list[BaseTestRunner] = [
     GroundedPlanningRunner(engine_path, "Default Parameters", 10, ["--k-bound", "200", "--search-strategy", "RPFS", "--reduction", "1", "--ctl-algorithm", "czero", "--xml-queries", "1", "--disable-partitioning"])
 ]
 
-
-
 results_path = "./results/"
 os.makedirs(os.path.dirname(results_path), exist_ok=True)
 
-results: dict[TestCase, dict[BaseTestRunner, list[QueryResult]]] = {}
-
 for test_case in tests:
+    results: dict[TestCase, dict[BaseTestRunner, list[QueryResult]]] = {}
     results[test_case] = dict()
     for runner in runners:
         results[test_case][runner] = list()
