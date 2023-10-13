@@ -37,9 +37,9 @@ class GroundedPlanningRunner(BaseTapaalTestRunner):
     def convert_query(self, query_path_from: str, query_path_to: str):
         # EF Atom_on_b1__b4_ >= 1 && Atom_on_b2__b1_ >= 1 && Atom_on_b4__b5_ >= 1 && Atom_on_b5__b3_ >= 1
 
-        input_query_file = open(query_path_from, "r")
-        input_query = input_query_file.read()
-        input_query_file.close()
+        with open(query_path_from, "r") as input_query_file:
+            input_query = input_query_file.read()
+
 
         matches = regex_find_place_value_in_query.findall(input_query)
         newline = "            \n"
@@ -63,6 +63,5 @@ class GroundedPlanningRunner(BaseTapaalTestRunner):
 </property-set>
 """
 
-        output_query_file = open(query_path_to, "w")
-        output_query_file.write(xml)
-        output_query_file.close()
+        with open(query_path_to, "w") as output_query_file:
+            output_query_file.write(xml)
