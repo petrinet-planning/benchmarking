@@ -31,7 +31,7 @@ class BaseTapaalTestRunner(BaseTestRunner):
 
         query_output_parsed.time_translation = time_translation
         query_output_parsed.time_tapaal = time_tapaal
-        query_output_parsed.time_total = time_tapaal
+        query_output_parsed.time_total = time_translation + time_tapaal
 
         return query_output_parsed
     
