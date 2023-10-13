@@ -15,7 +15,7 @@ class GroundedPlanningRunner(BaseTapaalTestRunner):
         super().__init__("GnadGjoel", description, needed_sample_size, tapaal_engine_path, base_parameters)
     
     def do_translation(self, test_case: TestCase) -> None:
-        p = subprocess.Popen([
+        p = subprocess.run([
             "python3",
             "./test_runner/systems/grounded_translation/src/fast-downward.py",
             "--keep-sas-file",

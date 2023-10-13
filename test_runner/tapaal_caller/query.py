@@ -18,15 +18,14 @@ class Query:
         self.parameters = parameters
 
     def run(self, engine: Engine) -> str:
-        p = subprocess.Popen(
+        p = subprocess.run(
             [engine.verifypn_path] + self.parameters + [self.pnml_path, self.query_path],
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT
             )
 
         # Collect output
-        output_lines = p.stdout.readlines()
-        output_full = "".join([line.decode("utf-8") for line in output_lines])
+        output_full = p.stdout.decode("utf-8")
 
         return output_full
 
