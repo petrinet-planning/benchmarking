@@ -2,8 +2,9 @@ import os
 import os.path
 import pickle
 
-from test_runner import TestCase, BaseTestRunner, LiftedPlanningRunner, GroundedPlanningRunner
-from test_runner.tapaal_caller import QueryResult
+from test_runner import TestCase
+from test_runner.translators import *
+from test_runner.analysers import *
 
 blocksworld_path = os.path.abspath("./benchmarks/autoscale-benchmarks/21.11-agile-strips/blocksworld")
 blocksworld_domain_path = os.path.join(blocksworld_path, "domain.pddl")
@@ -21,42 +22,24 @@ tests: list[TestCase] = [
 
 # engine_path = "C:/Users/Henrik/Downloads/tapaal-4.0.0-win64/tapaal-4.0.0-win64/bin/verifypn64.exe"  # Windows
 engine_path = "/mnt/c/Users/Henrik/Downloads/tapaal-4.0.0-linux64/tapaal-4.0.0-linux64/bin/verifypn64"  # Linux
-translations: list[BaseTestRunner] = [
-    LiftedPlanningRunner(engine_path, "Default Parameters", 2, ["--k-bound", "200", "--search-strategy", "RPFS", "--reduction", "1", "--ctl-algorithm", "czero", "--xml-queries", "1", "--disable-partitioning"]),
-    GroundedPlanningRunner(engine_path, "Default Parameters", 2, ["--k-bound", "200", "--search-strategy", "RPFS", "--reduction", "1", "--ctl-algorithm", "czero", "--xml-queries", "1", "--disable-partitioning"])
-]
-planners: list[BaseTestRunner] = [
-    LiftedPlanningRunner(engine_path, "Default Parameters", 20, ["--k-bound", "200", "--search-strategy", "RPFS", "--reduction", "1", "--ctl-algorithm", "czero", "--xml-queries", "1", "--disable-partitioning"]),
-    GroundedPlanningRunner(engine_path, "Default Parameters", 20, ["--k-bound", "200", "--search-strategy", "RPFS", "--reduction", "1", "--ctl-algorithm", "czero", "--xml-queries", "1", "--disable-partitioning"])
+
+translators: list[BaseTranslator] = [
+    LiftedTranslator(5, [
+        TapaalSearcher(engine_path, "Default Parameters", 20, ["--k-bound", "200", "--search-strategy", "RPFS", "--reduction", "1", "--ctl-algorithm", "czero", "--xml-queries", "1", "--disable-partitioning"])
+    ]),
+    GroundedTranslator(5, [
+        TapaalSearcher(engine_path, "Default Parameters", 20, ["--k-bound", "200", "--search-strategy", "RPFS", "--reduction", "1", "--ctl-algorithm", "czero", "--xml-queries", "1", "--disable-partitioning"])
+    ]),
+    
 ]
 
-results_path = "./results/"
-os.makedirs(os.path.dirname(results_path), exist_ok=True)
 open("run.sh", "w").close()
+translator_results: dict[BaseTranslator, "TranslatorResult"] = dict()
+search_results: dict[BaseTranslator, dict["TestCase", dict["BaseSearcher", list["SearchResult"]]]] = dict()
 
-results: dict[str,dict[TestCase, dict[BaseTestRunner, list[QueryResult]]]] = {}
-for test_case in tests:
-    results = {"translations": {}}
-    results["translations"][test_case] = dict()
-    for runner in translations:
-        results["translations"][test_case][runner] = list()
-        for i in range(0, runner.needed_sample_size):
-            print("{}_{}_{:02}".format(runner.translation_name, test_case.name, i))
-            results["translations"][test_case][runner].append(runner.do_translation(test_case, i))
+for translator in translators:
+    translator_results[translator] = translator.parse_results(tests)
+    search_results[translator] = translator.parse_search_results(tests)
 
-
-    with open(os.path.join(results_path, f"{test_case.name}_translation.pickle"), "wb") as f:
-        pickle.dump(results, f)
-
-for test_case in tests:
-    results = {"planners": {}}
-    results["planners"][test_case] = dict()
-    for runner in planners:
-        results["planners"][test_case][runner] = list()
-        for i in range(0, runner.needed_sample_size):
-            print("{}_{}_{:02}".format(runner.translation_name, test_case.name, i))
-            results["planners"][test_case][runner].append(runner.do_planning(test_case, i))
-
-
-    with open(os.path.join(results_path, f"{test_case.name}_planner.pickle"), "wb") as f:
-        pickle.dump(results, f)
+#     with open(os.path.join(results_path, f"{test_case.name}_planner.pickle"), "wb") as f:
+#         pickle.dump(results, f)

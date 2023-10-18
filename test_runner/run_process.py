@@ -37,7 +37,7 @@ def timed_command_piped_to_file(args: list[str], outfile: str, outfile_time: str
 
     
     if directory is not None:
-        full_command =  f'(cd "{os.path.abspath(directory)}"; ({command} > {outfile}) 2> {outfile_time})'
+        full_command =  f'(cd "{os.path.abspath(directory)}"; ({command} > "{outfile}") 2> "{outfile_time}")'
     else:
         full_command = f'({command} > {outfile}) 2> {outfile_time}'
     

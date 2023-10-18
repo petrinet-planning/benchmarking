@@ -1,11 +1,8 @@
 import re
-from re import Pattern
 
-from ..planner_result import PlannerResult
+from .search_result import SearchResult
 
-from ..time_measurement import TimeMeasurement
-
-regexes: dict[str, tuple[Pattern, type]] = {
+regexes: dict[str, tuple[re.Pattern, type]] = {
     # Parameters
     "parameters": (re.compile(r"^Parameters:([^\n]+)", re.MULTILINE), str),
 
@@ -45,22 +42,52 @@ regexes: dict[str, tuple[Pattern, type]] = {
     "time_verification": (re.compile(r"^Spent (\d+(?:\.\d+)?) on verification", re.MULTILINE), float),
 }
 
+class TapaalResult(SearchResult, dict):
+    # Parameters
+    parameters: str
 
-class QueryResult(PlannerResult):
+    # Color
+    rwstats_colored_pre: str
+    color_places: int
+    color_transitions: int
+    color_arcs: int
+    color_places_unfolded: int
+    color_transitions_unfolded: int
+    color_arcs_unfolded: int
     
-    @staticmethod
-    def parse(query_output: str, print_unfound_keys: bool = False) -> "QueryResult":
-        self = QueryResult()
+    # Stats
+    stats_discovered_states: int
+    stats_explored_states: int
+    stats_expanded_states: int
+    stats_max_tokens: int
 
+    # Query Reduction
+    query_size_before_reduction: int
+    query_size_after_reduction: int
+
+    # Net Reduction
+    place_count_before_reduction: int
+    place_count_after_reduction: int
+    transition_count_before_reduction: int
+    transition_count_after_reduction: int
+
+    # Time
+    time_query_reduction: float
+    time_color_structural_reduction: float
+    time_color_fixpoint: float
+    time_partitioned: float
+    time_unfolding: float
+    time_structural_reduction: float
+    time_potency: float
+    time_verification: float
+
+    def parse_result(self, file_content: str, print_unfound_keys: bool = False) -> "TapaalResult":
         for name, (regex, expected_type) in regexes.items():
-            found_value = regex.search(query_output)
+            found_value = regex.search(file_content)
             if found_value is None:
                 if print_unfound_keys:
                     print(f"No value found for {name}")
             else:
-                self.output[name] = expected_type(found_value[1])
+                self[name] = expected_type(found_value[1])
 
         return self
-
-    def __repr__(self) -> str:
-        return f"QueryResult(time_total={self.time_total})"
