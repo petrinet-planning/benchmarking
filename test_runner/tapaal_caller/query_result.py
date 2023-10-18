@@ -1,6 +1,10 @@
 import re
 from re import Pattern
 
+from ..planner_result import PlannerResult
+
+from ..time_measurement import TimeMeasurement
+
 regexes: dict[str, tuple[Pattern, type]] = {
     # Parameters
     "parameters": (re.compile(r"^Parameters:([^\n]+)", re.MULTILINE), str),
@@ -42,16 +46,8 @@ regexes: dict[str, tuple[Pattern, type]] = {
 }
 
 
-class QueryResult:
-    output: dict[str, any]
-
-    time_translation: float
-    time_tapaal: float
-    time_total: float
-
-    def __init__(self):
-        self.output = dict()
-
+class QueryResult(PlannerResult):
+    
     @staticmethod
     def parse(query_output: str, print_unfound_keys: bool = False) -> "QueryResult":
         self = QueryResult()

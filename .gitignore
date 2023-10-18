@@ -168,3 +168,5 @@ query.xml
 out.csv
 out.xml
 results/*
+experiments/*
+run.sh

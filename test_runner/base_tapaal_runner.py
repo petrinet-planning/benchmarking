@@ -1,9 +1,11 @@
 
 
 import time
-from . import BaseTestRunner, TestCase
-from .systems.colored_translation.main import translate_problem
 
+from .base_test_runner import BaseTestRunner
+from .test_case import TestCase
+from .translation_result import TranslationResult
+from .systems.colored_translation.main import translate_problem
 from .tapaal_caller import Query, QueryResult, Engine
 
 
@@ -17,14 +19,14 @@ class BaseTapaalTestRunner(BaseTestRunner):
         self.tapaal_engine = Engine(tapaal_engine_path)
         self.base_parameters = base_parameters
 
-    def run(self, test_case: TestCase) -> QueryResult:
+    def run(self, test_case: TestCase, iterator: int = None) -> QueryResult:
 
         time_translation = time.time()
-        self.do_translation(test_case)
+        self.do_translation(test_case, iterator)
         time_translation = time.time() - time_translation
 
         time_tapaal = time.time()
-        tapaal_stdout_full = self.do_tapaal()
+        tapaal_stdout_full = self.do_planning(test_case, iterator)
         time_tapaal = time.time() - time_tapaal
 
         query_output_parsed = QueryResult.parse(tapaal_stdout_full)
@@ -35,9 +37,3 @@ class BaseTapaalTestRunner(BaseTestRunner):
 
         return query_output_parsed
     
-    def do_translation(self, test_case: TestCase) -> None:
-        raise Exception("Not implemented for base class")
-
-    def do_tapaal(self):
-        raise Exception("Not implemented for base class")
-

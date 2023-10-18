@@ -21,23 +21,42 @@ tests: list[TestCase] = [
 
 # engine_path = "C:/Users/Henrik/Downloads/tapaal-4.0.0-win64/tapaal-4.0.0-win64/bin/verifypn64.exe"  # Windows
 engine_path = "/mnt/c/Users/Henrik/Downloads/tapaal-4.0.0-linux64/tapaal-4.0.0-linux64/bin/verifypn64"  # Linux
-runners: list[BaseTestRunner] = [
-    LiftedPlanningRunner(engine_path, "Default Parameters", 10, ["--k-bound", "200", "--search-strategy", "RPFS", "--reduction", "1", "--ctl-algorithm", "czero", "--xml-queries", "1", "--disable-partitioning"]),
-    GroundedPlanningRunner(engine_path, "Default Parameters", 10, ["--k-bound", "200", "--search-strategy", "RPFS", "--reduction", "1", "--ctl-algorithm", "czero", "--xml-queries", "1", "--disable-partitioning"])
+translations: list[BaseTestRunner] = [
+    LiftedPlanningRunner(engine_path, "Default Parameters", 2, ["--k-bound", "200", "--search-strategy", "RPFS", "--reduction", "1", "--ctl-algorithm", "czero", "--xml-queries", "1", "--disable-partitioning"]),
+    GroundedPlanningRunner(engine_path, "Default Parameters", 2, ["--k-bound", "200", "--search-strategy", "RPFS", "--reduction", "1", "--ctl-algorithm", "czero", "--xml-queries", "1", "--disable-partitioning"])
+]
+planners: list[BaseTestRunner] = [
+    LiftedPlanningRunner(engine_path, "Default Parameters", 20, ["--k-bound", "200", "--search-strategy", "RPFS", "--reduction", "1", "--ctl-algorithm", "czero", "--xml-queries", "1", "--disable-partitioning"]),
+    GroundedPlanningRunner(engine_path, "Default Parameters", 20, ["--k-bound", "200", "--search-strategy", "RPFS", "--reduction", "1", "--ctl-algorithm", "czero", "--xml-queries", "1", "--disable-partitioning"])
 ]
 
 results_path = "./results/"
 os.makedirs(os.path.dirname(results_path), exist_ok=True)
+open("run.sh", "w").close()
 
+results: dict[str,dict[TestCase, dict[BaseTestRunner, list[QueryResult]]]] = {}
 for test_case in tests:
-    results: dict[TestCase, dict[BaseTestRunner, list[QueryResult]]] = {}
-    results[test_case] = dict()
-    for runner in runners:
-        results[test_case][runner] = list()
+    results = {"translations": {}}
+    results["translations"][test_case] = dict()
+    for runner in translations:
+        results["translations"][test_case][runner] = list()
         for i in range(0, runner.needed_sample_size):
             print("{}_{}_{:02}".format(runner.translation_name, test_case.name, i))
-            results[test_case][runner].append(runner.run(test_case))
+            results["translations"][test_case][runner].append(runner.do_translation(test_case, i))
 
 
-    with open(os.path.join(results_path, f"{test_case.name}.pickle"), "wb") as f:
+    with open(os.path.join(results_path, f"{test_case.name}_translation.pickle"), "wb") as f:
+        pickle.dump(results, f)
+
+for test_case in tests:
+    results = {"planners": {}}
+    results["planners"][test_case] = dict()
+    for runner in planners:
+        results["planners"][test_case][runner] = list()
+        for i in range(0, runner.needed_sample_size):
+            print("{}_{}_{:02}".format(runner.translation_name, test_case.name, i))
+            results["planners"][test_case][runner].append(runner.do_planning(test_case, i))
+
+
+    with open(os.path.join(results_path, f"{test_case.name}_planner.pickle"), "wb") as f:
         pickle.dump(results, f)

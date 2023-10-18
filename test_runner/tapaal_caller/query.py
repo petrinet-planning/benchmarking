@@ -1,6 +1,5 @@
-import subprocess
-
-from test_runner.tapaal_caller.engine import Engine
+from ..run_process import run_process_timed, timed_command_piped_to_file
+from ..tapaal_caller.engine import Engine
 
 
 class Query:
@@ -17,15 +16,13 @@ class Query:
         self.query_path = query_path
         self.parameters = parameters
 
-    def run(self, engine: Engine) -> str:
-        p = subprocess.run(
+    def run(self, engine: Engine, working_directory: str, iterator: int = None) -> str:
+        output_full = timed_command_piped_to_file(
             [engine.verifypn_path] + self.parameters + [self.pnml_path, self.query_path],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.STDOUT
-            )
-
-        # Collect output
-        output_full = p.stdout.decode("utf-8")
+            directory=working_directory,
+            outfile=f"result_search_{iterator}.txt",
+            outfile_time=f"result_search_time_{iterator}.txt"
+        )
 
         return output_full
 
