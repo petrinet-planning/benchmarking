@@ -25,8 +25,8 @@ class GroundedTranslator(TapaalTranslator):
             "--optimal"
             ],
             directory=translation_directory,
-            outfile=self.get_result_path(iterator),
-            outfile_time=self.get_result_time_path(iterator)
+            outfile=self.get_result_path(test_case, iterator),
+            outfile_time=self.get_result_time_path(test_case, iterator)
         )
 
 
