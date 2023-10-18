@@ -41,5 +41,10 @@ for translator in translators:
     translator_results[translator] = translator.parse_results(tests)
     search_results[translator] = translator.parse_search_results(tests)
 
-#     with open(os.path.join(results_path, f"{test_case.name}_planner.pickle"), "wb") as f:
-#         pickle.dump(results, f)
+results_path = "./results"
+with open(os.path.join(results_path, f"translator_results.pickle"), "wb") as f:
+    pickle.dump(translator_results, f)
+
+with open(os.path.join(results_path, f"search_results.pickle"), "wb") as f:
+    pickle.dump(search_results, f)
+
