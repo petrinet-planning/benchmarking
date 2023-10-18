@@ -10,13 +10,13 @@ from .tapaal_caller import Query
 
 
 regex_find_place_value_in_query = re.compile("((?P<place>\w+) >= (?P<tokens>\d+))")
+downward_path = os.path.abspath("./test_runner/systems/grounded_translation/src/fast-downward.py")
 
 class GroundedPlanningRunner(BaseTapaalTestRunner):
     def __init__(self, tapaal_engine_path: str, description: str, needed_sample_size: int, base_parameters: list[str] = []):
         super().__init__("GnadGjoel", description, needed_sample_size, tapaal_engine_path, base_parameters)
     
     def do_translation(self, test_case: TestCase, iterator: int = None) -> None:
-        downward_path = os.path.abspath("./test_runner/systems/grounded_translation/src/fast-downward.py")
         translation_directory = self.get_path_for_test_case(test_case)
 
         timed_command_piped_to_file([

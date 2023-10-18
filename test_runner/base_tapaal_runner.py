@@ -5,7 +5,6 @@ import time
 from .base_test_runner import BaseTestRunner
 from .test_case import TestCase
 from .translation_result import TranslationResult
-from .systems.colored_translation.main import translate_problem
 from .tapaal_caller import Query, QueryResult, Engine
 
 
