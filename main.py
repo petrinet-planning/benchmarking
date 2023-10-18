@@ -33,6 +33,10 @@ translators: list[BaseTranslator] = [
     
 ]
 
+for translator in translators:
+    translator.do_translations_and_searches(tests)
+
+
 open("run.sh", "w").close()
 translator_results: dict[BaseTranslator, "TranslatorResult"] = dict()
 search_results: dict[BaseTranslator, dict["TestCase", dict["BaseSearcher", list["SearchResult"]]]] = dict()
