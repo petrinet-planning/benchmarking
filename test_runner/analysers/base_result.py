@@ -14,16 +14,11 @@ time_regexes: dict[str, re.Pattern] = {
 class BaseResult(object):
     time: TimeMeasurement
 
-    def parse_files(self, result_file_path: str, time_file_path: str, print_unfound_keys: bool = False) -> Optional["BaseResult"]:
-        if not os.path.exists(result_file_path):
-            return None
-        if not os.path.exists(time_file_path):
-            return None
-
+    def parse(self, result_file_path: str, print_unfound_keys: bool = False) -> Optional["BaseResult"]:
         with open(result_file_path, "r") as result_file:
-            with open(time_file_path, "r") as time_file:
-                self.parse_result("".join(result_file.readlines()))
-                self.parse_time("".join(time_file.readlines()))
+            filecontent = "".join(result_file.readlines())
+            self.parse_result(filecontent)
+            self.parse_time(filecontent)
         return self
 
     def parse_result(self, file_content: str, print_unfound_keys: bool = False) -> None:
@@ -35,7 +30,7 @@ class BaseResult(object):
         sys = time_regexes["sys"].search(file_content)
 
         self.time = TimeMeasurement(
-            float(real[1]) * 60 + float(real[2]),
-            float(user[1]) * 60 + float(user[2]),
-            float(sys[1]) * 60 + float(sys[2])
+            (float(real[1]) * 60 + float(real[2])) if real is not None else float("inf"),
+            (float(user[1]) * 60 + float(user[2])) if user is not None else float("inf"),
+            (float(sys[1]) * 60 + float(sys[2]))   if sys is not None else float("inf")
         )

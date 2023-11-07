@@ -1,3 +1,6 @@
+import os
+import glob
+
 from ..analysers import SearchResult
 from ..test_case import TestCase
 from . import *
@@ -13,32 +16,43 @@ class BaseSearcher(object):
         self.sample_count = sample_count
 
 
-    def do_searches(self, translator: "BaseTranslator", test_case: "TestCase") -> None:
+    def do_searches(self, translator: "BaseTranslator", test_case: "TestCase") -> str:
+        out: list[str] = []
         for i in range(self.sample_count):
-            self.do_search(translator, test_case, i)
+            out.append(self.do_search(translator, test_case, i))
+        
+        return "\n".join(out)
 
 
     def do_search(self, translator: "BaseTranslator", test_case: "TestCase", iterator: int = None) -> None:
         pass
 
+    def get_result_paths(self, translator: "BaseTranslator", test_case: "TestCase") -> list[str]:
+        base_path = os.path.join(translator.base_dir, translator.name, test_case.name, self.name)
+        return glob.glob(f"{base_path}/*.search.*.txt")
 
-    def get_result_paths(self, test_cases: list["TestCase"]) -> tuple[str, str]:
-        return [(self.get_result_path(case, i), self.get_result_time_path(case, i)) for i in self.sample_count for case in test_cases]
-
-
-    def get_result_path(self, iterator: int):
-        return f"result_translation_{iterator}.txt",
-        
-
-    def get_result_time_path(self, iterator: int):
-        return f"result_translation_time_{iterator}.txt"
 
     def parse_results(self, translator: "BaseTranslator",  test_case: "TestCase") -> list["SearchResult"]:
-        return [
-            self.parser().parse_files(
-                self.get_result_path(translator, test_case, i), 
-                self.get_result_time_path(translator, test_case, i)
-                )
-            for i in range(self.sample_count)
-        ]
-        
+        return [self.parser().parse(result_path) for result_path in self.get_result_paths(translator, test_case)]
+
+
+    def _generate_search_script_content_base(self, translator: BaseTranslator, test_case: TestCase) -> str:
+        return f"""\
+#!/bin/bash
+#SBATCH -J "{translator.name} - {test_case.name} - {self.name}"
+#SBATCH --mail-type=FAIL  # BEGIN,END,FAIL,ALL,NONE
+#SBATCH --mail-user=hginne19@student.aau.dk
+#SBATCH --partition=naples,dhabi
+#SBATCH --time=1:00:00
+#SBATCH --mem=16G
+
+let "m=1024*1024*15"
+ulimit -v $m
+
+source /nfs/home/student.aau.dk/hginne19/slurm-dependencies.sh
+
+"""
+    
+    def generate_search_script_content(self, translator: BaseTranslator, test_case: TestCase) -> str:
+        pass
+    

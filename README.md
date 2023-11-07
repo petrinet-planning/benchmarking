@@ -40,6 +40,11 @@ Lifted Translation:
 
 ```
 
+Call Tapaal:
+```sh
+
+```
+
 ## Updating all dependencies
 ```sh
 git submodule update --remote --recursive --merge

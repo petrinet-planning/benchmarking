@@ -32,18 +32,24 @@ def run_process_timed(args: list[str], directory: str) -> str:
     return ""
 
 
-def timed_command_piped_to_file(args: list[str], outfile: str, outfile_time: str, directory: str = None) -> None:
+def timed_command_piped_to_file(args: list[str], outfile: str, outfile_time: str, directory: str = None) -> str:
     command = command_str(["time"] + args)
 
     
     if directory is not None:
-        full_command =  f'(cd "{os.path.abspath(directory)}"; ({command} > "{outfile}") 2> "{outfile_time}")'
+        full_path = os.path.abspath(directory)
+        rel_path = os.path.relpath(full_path)
+        rel_out_path = os.path.relpath(outfile, full_path)
+        rel_time_path = os.path.relpath(outfile_time, full_path)
+        full_command =  f'(cd "{rel_path}"; ({command} > "{rel_out_path}") 2> "{rel_time_path}")'
     else:
         full_command = f'({command} > {outfile}) 2> {outfile_time}'
+
+    return full_command
     
-    with open("run.sh", "a") as f:
-        print(full_command)
-        f.write(f"{full_command}\n")
+    # with open("run.sh", "a") as f:
+    #     print(full_command)
+    #     f.write(f"{full_command}\n")
         # print(full_command, f)
 
     # p = os.system(full_command)
