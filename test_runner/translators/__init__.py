@@ -5,3 +5,6 @@ from .tapaal_translator import TapaalTranslator
 from .tapaal_searcher import TapaalSearcher
 from .lifted_translator import LiftedTranslator
 from .grounded_translator import GroundedTranslator
+
+from .downward_translator import DownwardTranslator
+from .downward_searcher import DownwardSearcher
