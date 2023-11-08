@@ -1,3 +1,5 @@
+import os
+
 from test_runner import TestCase
 from test_runner.translators import *
 from test_runner.analysers import *
