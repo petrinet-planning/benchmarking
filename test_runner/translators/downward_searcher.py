@@ -1,6 +1,6 @@
 import os.path
 
-from ..analysers import TapaalResult
+from ..analysers import DownwardSearchResult
 from ..test_case import TestCase
 
 from . import *
@@ -8,17 +8,19 @@ from . import *
 class DownwardSearcher(BaseSearcher):
     parameters: list[str]
     engine_path: str
-    parser: TapaalResult = TapaalResult
+    parser: DownwardSearchResult = DownwardSearchResult
 
     def __init__(self, engine_path: str, name: str, sample_count: int, parameters: list[str] = []) -> None:
         super().__init__(name, sample_count)
         self.engine_path = engine_path
         self.parameters = parameters
     
+    
     def out_dir(self, translator: "DownwardTranslator", test_case: "TestCase"):
         dir = os.path.join(translator.get_translation_directory(test_case), self.name)
         os.makedirs(dir, exist_ok=True)
         return dir
+
 
     def do_search(self, translator: "DownwardTranslator", test_case: "TestCase") -> str:
         translator_working_directory = translator.get_translation_directory(test_case)

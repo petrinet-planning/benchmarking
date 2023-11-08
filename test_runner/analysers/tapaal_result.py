@@ -3,6 +3,9 @@ import re
 from .search_result import SearchResult
 
 regexes: dict[str, tuple[re.Pattern, type]] = {
+    # Base
+    "has_plan": (re.compile(r"^Spent (\d+(?:\.\d+)?) on verification", re.MULTILINE), str),
+
     # Parameters
     "parameters": (re.compile(r"^Parameters:([^\n]+)", re.MULTILINE), str),
 
@@ -42,7 +45,7 @@ regexes: dict[str, tuple[re.Pattern, type]] = {
     "time_verification": (re.compile(r"^Spent (\d+(?:\.\d+)?) on verification", re.MULTILINE), float),
 }
 
-class TapaalResult(SearchResult, dict):
+class TapaalResult(SearchResult):
     # Parameters
     parameters: str
 
