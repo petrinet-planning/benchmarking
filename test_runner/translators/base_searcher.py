@@ -24,8 +24,9 @@ class BaseSearcher(object):
         return "\n".join(out)
 
 
-    def do_search(self, translator: "BaseTranslator", test_case: "TestCase", iterator: int = None) -> None:
+    def do_search(self, translator: "BaseTranslator", test_case: "TestCase") -> None:
         pass
+
 
     def get_result_paths(self, translator: "BaseTranslator", test_case: "TestCase") -> list[str]:
         base_path = os.path.join(translator.base_dir, translator.name, test_case.name, self.name)
@@ -52,6 +53,7 @@ ulimit -v $m
 source /nfs/home/student.aau.dk/hginne19/slurm-dependencies.sh
 
 """
+    
     
     def generate_search_script_content(self, translator: BaseTranslator, test_case: TestCase) -> str:
         pass

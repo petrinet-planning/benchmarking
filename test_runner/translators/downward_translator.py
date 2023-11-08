@@ -11,7 +11,7 @@ class DownwardTranslator(BaseTranslator):
         super().__init__("downward", sample_count, searches)
 
 
-    def do_translation(self, test_case: "TestCase", iterator: int = None) -> str:
+    def do_translation(self, test_case: "TestCase") -> str:
         translation_directory = self.get_translation_directory(test_case)
 
         return f"""\

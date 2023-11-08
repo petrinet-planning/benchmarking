@@ -1,4 +1,5 @@
 from .base_translator import BaseTranslator
+from .tapaal_searcher import TapaalSearcher
 
 class TapaalTranslator(BaseTranslator):
     searchers: list["TapaalSearcher"]
