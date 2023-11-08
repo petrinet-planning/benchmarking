@@ -56,3 +56,8 @@ def generate_scripts(translators: list[BaseTranslator], test_cases: list[TestCas
                     searcher_file_name = f"./experiments/{translator.name}/{test.name}/search_{searcher.name}.sh"
                     with open(searcher_file_name, "w") as search_runner_file:
                         search_runner_file.write(searcher.generate_search_script_content(translator, test))
+
+if __name__ == "__main__":
+    from config import translators, tests
+
+    generate_scripts(translators, tests)

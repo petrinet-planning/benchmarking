@@ -38,5 +38,8 @@ def load_search_results() -> search_result_type:
         return pickle.load(f)
 
 
-load_translator_results_ = lambda: load_translator_results()
-load_search_results_ = lambda: load_search_results()
+if __name__ == "__main__":
+    from config import translators, tests
+
+    parse(translators, tests)
+    
