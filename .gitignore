@@ -169,4 +169,5 @@ out.csv
 out.xml
 results/*
 experiments/*
+experiments_from_server/*
 run.sh
