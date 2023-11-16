@@ -14,3 +14,6 @@
 [submodule "test_runner/systems/downward"]
 	path = test_runner/systems/downward
 	url = https://github.com/aibasel/downward.git
+[submodule "submodules/VAL"]
+	path = submodules/VAL
+	url = https://github.com/KCL-Planning/VAL.git
