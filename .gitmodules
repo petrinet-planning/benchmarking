@@ -1,19 +1,19 @@
 [submodule "colored_translation"]
 	path = test_runner/systems/colored_translation
-	url = https://github.com/petrinet-planning/colored-lifted-planning.git
+	url = git@github.com:petrinet-planning/colored-lifted-planning.git
 [submodule "grounded_translation"]
 	path = test_runner/systems/grounded_translation
-	url = https://github.com/petrinet-planning/planning-via-unfolding
+	url = git@github.com:petrinet-planning/planning-via-unfolding.git
 	branch = pnml
 [submodule "benchmarks/downward-benchmarks"]
 	path = benchmarks/downward-benchmarks
-	url = https://github.com/aibasel/downward-benchmarks
+	url = git@github.com:aibasel/downward-benchmarks.git
 [submodule "benchmarks/autoscale-benchmarks"]
 	path = benchmarks/autoscale-benchmarks
-	url = https://github.com/AI-Planning/autoscale-benchmarks
+	url = git@github.com:AI-Planning/autoscale-benchmarks.git
 [submodule "test_runner/systems/downward"]
 	path = test_runner/systems/downward
-	url = https://github.com/aibasel/downward.git
+	url = git@github.com:aibasel/downward.git
 [submodule "submodules/VAL"]
 	path = submodules/VAL
-	url = https://github.com/KCL-Planning/VAL.git
+	url = git@github.com:KCL-Planning/VAL.git
