@@ -1,8 +1,42 @@
 import os.path
 
 from test_runner import TestCase
+from test_runner.test_validity import get_validity_code
 from test_runner.translators import *
 
+
+
+def generate_valid_test_cases(benchmarks_basedir: str) -> list[TestCase]:
+    domain_names = os.listdir(benchmarks_basedir)
+    domain_names = ["ged"]
+    p_range = range(1, 4)
+
+    domain_validities = [(domain_name, get_validity_code(f"{benchmarks_basedir}/{domain_name}/domain.pddl", f"{benchmarks_basedir}/{domain_name}/p01.pddl")) for domain_name in domain_names]
+    
+    for domain, validity in domain_validities:
+        print(f"{validity:02} - {domain}")
+
+
+    valid_domains = [domain_name for (domain_name, validity) in domain_validities if validity == 0]
+
+    test_cases = [
+        TestCase(
+            f"{domain_name}_{pnum:02}",
+            f"{benchmarks_basedir}/{domain_name}/domain.pddl",
+            f"{benchmarks_basedir}/{domain_name}/p{pnum:02}.pddl",
+        ) 
+        for domain_name in valid_domains
+        for pnum in p_range
+    ]
+
+    #valid_test_case = [case for case in all_test_cases if test_if_case_is_valid(case.domain_path, case.problem_path)]
+
+
+
+    return test_cases
+
+
+all_valid_tests = generate_valid_test_cases("./benchmarks/autoscale-benchmarks/21.11-agile-strips")
 
 blocksworld_path = os.path.abspath("./benchmarks/autoscale-benchmarks/21.11-agile-strips/blocksworld")
 blocksworld_domain_path = os.path.join(blocksworld_path, "domain.pddl")
@@ -41,28 +75,29 @@ snake: list[TestCase] = [
     # TestCase("snake_12", snake_domain_path, os.path.join(snake_path, "p12.pddl"))
 ]
 
-tests = blocksworld
+tests = all_valid_tests
 
-# engine_path = "C:/Users/Henrik/Downloads/tapaal-4.0.0-win64/tapaal-4.0.0-win64/bin/verifypn64.exe"  # Windows
-engine_path = "/mnt/c/Users/Henrik/Downloads/tapaal-4.0.0-linux64/tapaal-4.0.0-linux64/bin/verifypn64"  # Linux
-# engine_path = "/nfs/home/student.aau.dk/hginne19/verifypn64"  # Cluster
 
-is_cluster = True
-engine_path = "/nfs/home/student.aau.dk/hginne19/verifypn64" if is_cluster else engine_path
-run_cmd = "run " if is_cluster else ""
-batch_cmd = "batch " if is_cluster else "./"
-next_cmd = "next " if is_cluster else ""
+engine_path = "/nfs/home/student.aau.dk/hginne19/verifypn64"  # Cluster
+engine_path_1safe = "/nfs/home/student.aau.dk/hginne19/verifypn1safe"  # Cluster
 
 downward_path = "./test_runner/systems/downward/fast-downward.py"
 
+translation_count = 1
+sample_count = 2
+
 translators: list[BaseTranslator] = [
-    LiftedTranslator(2, [
-        TapaalSearcher(engine_path, "no_color_optimizations", 50, ["--search-strategy", "RPFS", "--xml-queries", "1", "--disable-partitioning", "-D", "0"]),
+    LiftedTranslator(translation_count, [
+        TapaalSearcher(engine_path_1safe, "rpfs", sample_count, ["--search-strategy", "RPFS", "--xml-queries", "1"]),
+        TapaalSearcher(engine_path_1safe, "no_color_optimizations", sample_count, ["--search-strategy", "RPFS", "--xml-queries", "1", "--disable-partitioning", "-D", "0"]),
+        TapaalSearcher(engine_path_1safe, "randomwalk_1000_0", sample_count, ["--search-strategy", "Randomwalk", "1000", "0", "--xml-queries", "1"]),
     ]),
-    GroundedTranslator(2, [
-        TapaalSearcher(engine_path, "no_color_optimizations", 50, ["--search-strategy", "RPFS", "--xml-queries", "1", "--disable-partitioning", "-D", "0"])
+    GroundedTranslator(translation_count, [
+        TapaalSearcher(engine_path_1safe, "rpfs", sample_count, ["--search-strategy", "RPFS", "--xml-queries", "1"]),
+        TapaalSearcher(engine_path_1safe, "no_color_optimizations", sample_count, ["--search-strategy", "RPFS", "--xml-queries", "1", "--disable-partitioning", "-D", "0"]),
+        TapaalSearcher(engine_path_1safe, "randomwalk_1000_0", sample_count, ["--search-strategy", "Randomwalk", "1000", "0", "--xml-queries", "1"]),
     ]),
-    DownwardTranslator(2, [
-        DownwardSearcher(downward_path, "lama_first", 50, ["--alias", "lama-first"])
+    DownwardTranslator(translation_count, [
+        DownwardSearcher(downward_path, "lama_first", sample_count, ["--alias", "lama-first"])
     ])    
 ]
