@@ -17,3 +17,7 @@
 [submodule "submodules/VAL"]
 	path = submodules/VAL
 	url = git@github.com:KCL-Planning/VAL.git
+[submodule "planningEngine"]
+	path = test_runner/systems/verifypn
+	url = git@github.com:petrinet-planning/verifypn.git
+	branch = PlanningEngine
