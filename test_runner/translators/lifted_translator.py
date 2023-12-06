@@ -7,7 +7,7 @@ from .tapaal_translator import TapaalTranslator
 
 colored_translation_path = os.path.abspath("./test_runner/systems/colored_translation/main.py")
 class LiftedTranslator(TapaalTranslator):
-    def __init__(self, sample_count: int, searches: list["TapaalSearcher"] = []) -> None:
+    def __init__(self, sample_count: int, searches: list["TapaalColorSearcher"] = []) -> None:
         super().__init__("colored", sample_count, searches)
 
 

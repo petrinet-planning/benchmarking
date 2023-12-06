@@ -8,7 +8,8 @@ from test_runner.translators import *
 
 def generate_valid_test_cases(benchmarks_basedir: str) -> list[TestCase]:
     domain_names = os.listdir(benchmarks_basedir)
-    domain_names = ["ged"]
+    # domain_names = ["blocksworld", "childsnack", "miconic", "pegsol", "rovers", "scanalyzer", "visitall"]
+    domain_names = ["childsnack"]
     p_range = range(1, 4)
 
     domain_validities = [(domain_name, get_validity_code(f"{benchmarks_basedir}/{domain_name}/domain.pddl", f"{benchmarks_basedir}/{domain_name}/p01.pddl")) for domain_name in domain_names]
@@ -79,7 +80,7 @@ tests = all_valid_tests
 
 
 engine_path = "/nfs/home/student.aau.dk/hginne19/verifypn64"  # Cluster
-engine_path_1safe = "/nfs/home/student.aau.dk/hginne19/verifypn1safe"  # Cluster
+engine_path_1safe = "/nfs/home/student.aau.dk/hginne19/project/benchmarking/test_runner/systems/verifypn/build/verifypn/bin/verifypn-linux64"  # Cluster
 
 downward_path = "./test_runner/systems/downward/fast-downward.py"
 
@@ -88,14 +89,14 @@ sample_count = 2
 
 translators: list[BaseTranslator] = [
     LiftedTranslator(translation_count, [
-        TapaalSearcher(engine_path_1safe, "rpfs", sample_count, ["--search-strategy", "RPFS", "--xml-queries", "1"]),
-        TapaalSearcher(engine_path_1safe, "no_color_optimizations", sample_count, ["--search-strategy", "RPFS", "--xml-queries", "1", "--disable-partitioning", "-D", "0"]),
-        TapaalSearcher(engine_path_1safe, "randomwalk_1000_0", sample_count, ["--search-strategy", "Randomwalk", "1000", "0", "--xml-queries", "1"]),
+        TapaalColorSearcher(engine_path_1safe, "rpfs", sample_count, ["--search-strategy", "RPFS", "--xml-queries", "1", "--trace"]),
+        TapaalColorSearcher(engine_path_1safe, "no_color_optimizations", sample_count, ["--search-strategy", "RPFS", "--xml-queries", "1", "--disable-partitioning", "-D", "0", "--trace"]),
+        TapaalColorSearcher(engine_path_1safe, "randomwalk_1000_0", sample_count, ["--search-strategy", "RandomWalk", "1000", "0", "--xml-queries", "1", "--trace"]),
     ]),
     GroundedTranslator(translation_count, [
-        TapaalSearcher(engine_path_1safe, "rpfs", sample_count, ["--search-strategy", "RPFS", "--xml-queries", "1"]),
-        TapaalSearcher(engine_path_1safe, "no_color_optimizations", sample_count, ["--search-strategy", "RPFS", "--xml-queries", "1", "--disable-partitioning", "-D", "0"]),
-        TapaalSearcher(engine_path_1safe, "randomwalk_1000_0", sample_count, ["--search-strategy", "Randomwalk", "1000", "0", "--xml-queries", "1"]),
+        TapaalSearcher(engine_path_1safe, "rpfs", sample_count, ["--search-strategy", "RPFS", "--xml-queries", "1", "--trace"]),
+        TapaalSearcher(engine_path_1safe, "no_color_optimizations", sample_count, ["--search-strategy", "RPFS", "--xml-queries", "1", "--disable-partitioning", "-D", "0", "--trace"]),
+        TapaalSearcher(engine_path_1safe, "randomwalk_1000_0", sample_count, ["--search-strategy", "Randomwalk", "1000", "0", "--xml-queries", "1", "--trace"]),
     ]),
     DownwardTranslator(translation_count, [
         DownwardSearcher(downward_path, "lama_first", sample_count, ["--alias", "lama-first"])

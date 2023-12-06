@@ -1,6 +1,7 @@
 import re
 
 from .search_result import SearchResult
+from .plan import Plan
 
 regexes: dict[str, tuple[re.Pattern, type]] = {
     # Base
@@ -46,6 +47,8 @@ regexes: dict[str, tuple[re.Pattern, type]] = {
 }
 
 class TapaalResult(SearchResult):
+    plan: Plan
+
     # Parameters
     parameters: str
 
