@@ -34,8 +34,6 @@ class TapaalSearcher(BaseSearcher):
     
     def generate_search_script_content(self, translator: BaseTranslator, test_case: TestCase) -> str:
         return self._generate_search_script_content_base(translator, test_case) + f"""\
-python3 -m venv venv
-source venv/bin/activate
 
 time {self.do_search(translator, test_case)}
 """

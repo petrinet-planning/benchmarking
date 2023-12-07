@@ -50,8 +50,6 @@ class BaseSearcher(object):
 let "m=1024*1024*15"
 ulimit -v $m
 
-source /nfs/home/student.aau.dk/hginne19/slurm-dependencies.sh
-
 """
     
     

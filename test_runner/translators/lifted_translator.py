@@ -29,10 +29,7 @@ class LiftedTranslator(TapaalTranslator):
     def generate_translator_script_content(self, test_case: TestCase) -> str:
 
         return self._generate_translator_script_content_prefix(test_case) + f"""\
-python3 -m venv venv
-source venv/bin/activate
-
-python3 -m pip install unified_planning
+source ../colored_venv/bin/activate
 
 time {self.do_translation(test_case)}
 """
