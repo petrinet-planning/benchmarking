@@ -7,3 +7,7 @@ bash build_planning-via-unfolding.sh
 
 echo Building VerifyPN
 bash build_verifypn.sh
+
+echo Building Val
+bash build_val.sh
+
