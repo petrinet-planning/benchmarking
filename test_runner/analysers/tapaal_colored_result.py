@@ -5,7 +5,7 @@ from .plan import Plan, PlanAction
 
 
 transition_meta_data_finder_regex = re.compile(r"transitionVars\[[^]]+\] = \{[^\}]+\}", flags=re.MULTILINE)
-transition_meta_data_parser_transition_name_regex = re.compile(r"transitionVars\[\"(?P<transitionName>\w+)\"\]")
+transition_meta_data_parser_transition_name_regex = re.compile(r"transitionVars\[\"(?P<transitionName>[\w-]+)\"\]")
 transition_meta_data_parser_variables_regex = re.compile(r"\"(?P<varname>[\w-]+):(?P<typename>[\w-]+)\": \"(?P<varvalue>[\w-]+)\", ")
 
 trace_finder_regex = re.compile(r"<trace>.*</trace>", re.S)
