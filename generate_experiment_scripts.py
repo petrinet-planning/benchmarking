@@ -9,6 +9,13 @@ def make_init_runner_file(translators: list[BaseTranslator], test_cases: list[Te
     return f"""\
 #!/bin/bash
 
+venv_path=colored/colored_venv
+
+python3 -m venv $venv_path
+source $venv_path/bin/activate
+
+python3 -m pip install unified_planning
+
 {newline.join([f'(cd {translator.name}/{test.name}; sbatch run.sh)' for translator in translators for test in test_cases])}
 
 """
@@ -19,7 +26,7 @@ def make_experiment_runner_file(translator: BaseTranslator, test_case: TestCase)
     return f"""\
 #!/bin/bash
 #SBATCH -J "{translator.name} - {test_case.name}"
-#SBATCH --partition=naples,dhabi
+#SBATCH --partition=dhabi
 
 source /nfs/home/student.aau.dk/hginne19/slurm-dependencies.sh
 
