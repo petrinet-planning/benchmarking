@@ -57,8 +57,9 @@ class TapaalColoredResult(TapaalResult):
     def parse_result(self, file_content: str, print_unfound_keys: bool = False) -> "TapaalResult":
         TapaalResult.parse_result(self, file_content, print_unfound_keys)
 
-        plan_generator = _Plan_Generator()
-        self.plan = plan_generator.parse_tapaal_output(file_content)
+        if self["has_plan"]:
+            plan_generator = _Plan_Generator()
+            self.plan = plan_generator.parse_tapaal_output(file_content)
 
         return self
     

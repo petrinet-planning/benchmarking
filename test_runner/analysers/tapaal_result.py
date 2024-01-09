@@ -4,9 +4,6 @@ from .search_result import SearchResult
 from .plan import Plan
 
 regexes: dict[str, tuple[re.Pattern, type]] = {
-    # Base
-    "has_plan": (re.compile(r"^Spent (\d+(?:\.\d+)?) on verification", re.MULTILINE), str),
-
     # Parameters
     "parameters": (re.compile(r"^Parameters:([^\n]+)", re.MULTILINE), str),
 
@@ -95,5 +92,7 @@ class TapaalResult(SearchResult):
                     print(f"No value found for {name}")
             else:
                 self[name] = expected_type(found_value[1])
+
+        self["has_plan"] = self.get("time_verification") != None
 
         return self
