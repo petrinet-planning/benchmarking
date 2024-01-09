@@ -43,7 +43,7 @@ class BaseSearcher(object):
 #SBATCH -J "{translator.name} - {test_case.name} - {self.name}"
 #SBATCH --mail-type=FAIL  # BEGIN,END,FAIL,ALL,NONE
 #SBATCH --mail-user=hginne19@student.aau.dk
-#SBATCH --partition=naples,dhabi
+#SBATCH --partition=dhabi
 #SBATCH --time=1:00:00
 #SBATCH --mem=16G
 
