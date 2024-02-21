@@ -174,3 +174,5 @@ run.sh
 results_old/*
 experiments_old/*
 experiments_from_server_old/*
+
+*.ignored/*
