@@ -171,3 +171,6 @@ results/*
 experiments/*
 experiments_from_server/*
 run.sh
+results_old/*
+experiments_old/*
+experiments_from_server_old/*

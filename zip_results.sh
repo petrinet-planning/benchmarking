@@ -1,0 +1,1 @@
+tar -zcvf --exclude='venv/' experiments.tar.gz experiments
