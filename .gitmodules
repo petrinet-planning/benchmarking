@@ -21,3 +21,6 @@
 	path = test_runner/systems/verifypn
 	url = git@github.com:petrinet-planning/verifypn.git
 	branch = PlanningEngine
+[submodule "test_runner/systems/colored_translation_hierarchy"]
+	path = test_runner/systems/colored_translation_hierarchy
+	url = git@github.com:petrinet-planning/colored-lifted-planning.git
