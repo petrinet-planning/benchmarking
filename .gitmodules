@@ -1,6 +1,7 @@
 [submodule "colored_translation"]
 	path = test_runner/systems/colored_translation
 	url = git@github.com:petrinet-planning/colored-lifted-planning.git
+	branch = main
 [submodule "grounded_translation"]
 	path = test_runner/systems/grounded_translation
 	url = git@github.com:petrinet-planning/planning-via-unfolding.git
@@ -24,3 +25,4 @@
 [submodule "test_runner/systems/colored_translation_hierarchy"]
 	path = test_runner/systems/colored_translation_hierarchy
 	url = git@github.com:petrinet-planning/colored-lifted-planning.git
+	branch = TypeHierarchy
