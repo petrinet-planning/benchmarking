@@ -43,6 +43,10 @@ regexes: dict[str, tuple[re.Pattern, type]] = {
     "time_verification": (re.compile(r"^Spent (\d+(?:\.\d+)?) on verification", re.MULTILINE), float),
 }
 
+
+# Trace found?
+trace_keywords_found_regex = re.compile(r"^Query is satisfied.\r?\nTrace:\r?\n<trace>", re.MULTILINE)
+
 class TapaalResult(SearchResult):
     plan: Plan
 
@@ -74,6 +78,9 @@ class TapaalResult(SearchResult):
     transition_count_before_reduction: int
     transition_count_after_reduction: int
 
+    # Trace found?
+    trace_keywords_found: str
+
     # Time
     time_query_reduction: float
     time_color_structural_reduction: float
@@ -93,6 +100,6 @@ class TapaalResult(SearchResult):
             else:
                 self[name] = expected_type(found_value[1])
 
-        self["has_plan"] = self.get("time_verification") != None
+        self["has_plan"] = trace_keywords_found_regex.match(file_content) != None
 
         return self
