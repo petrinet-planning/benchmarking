@@ -52,6 +52,6 @@ Value: 28
     
 
 
-reader = PDDLReader()
-domain = reader.parse_problem("benchmarks/autoscale-benchmarks/21.11-agile-strips/childsnack/domain.pddl")
-print("goimer")
+#reader = PDDLReader()
+#domain = reader.parse_problem("benchmarks/autoscale-benchmarks/21.11-agile-strips/childsnack/domain.pddl")
+#print("goimer")

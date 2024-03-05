@@ -15,10 +15,24 @@ def generate_valid_test_cases(benchmarks_basedir: str) -> list[TestCase]:
     # domain_names = ["blocksworld", "childsnack", "ged", "miconic", "pegsol", "rovers", "scanalyzer", "visitall", "freecell", "grid", "gripper", "logistics"]
 
     # Hierarchical domains
-    domain_names = ["blocksworld", "childsnack", "depots", "driverlog", "freecell", "ged", "grid", "gripper", "hiking", "logistics", "miconic", "mprime", "nomystery", "pegsol", "rovers", "scanalyzer", "tpp", "visitall"]
-    p_range = range(1, 11)
+    #domain_names = ["blocksworld", "childsnack", "depots", "driverlog", "freecell", "ged", "grid", "gripper", "hiking", "logistics", "miconic", "mprime", "nomystery", "pegsol", "rovers", "scanalyzer", "tpp", "visitall"]
+    
+    # All domains
+    # domain_names = ["agricola", "airport", "blocksworld", "childsnack", "data-network", "depots", "driverlog", "elevators", "floortile",
+    #                 "freecell", "ged", "grid", "gripper", "hiking", "logistics", "miconic", "mprime", "nomystery", "openstacks", 
+    #                 "organic-split-synthesis", "parcprinter", "parking", "pathways", "pegsol", "pipesworld-notankage", "pipesworld-tankage", 
+    #                 "rovers", "scanalyzer", "snake", "sokoban", "storage", "termes", "tetris", "thoughtful", "tidybot", "tpp", "visitall",
+    #                 "woodworking", "zenotravel"]
+    p_range = range(1, 20)
 
-    domain_validities = [(domain_name, get_validity_code(f"{benchmarks_basedir}/{domain_name}/domain.pddl", f"{benchmarks_basedir}/{domain_name}/p01.pddl")) for domain_name in domain_names]
+    domain_validities = []
+    for domain_name in domain_names:
+        if os.path.isfile(os.path.join(benchmarks_basedir, domain_name, "domain.pddl")):
+            domain_validities.append((domain_name, get_validity_code(f"{benchmarks_basedir}/{domain_name}/domain.pddl", f"{benchmarks_basedir}/{domain_name}/p01.pddl")))
+        else:
+            domain_validities.append((domain_name, get_validity_code(f"{benchmarks_basedir}/{domain_name}/domain-p01.pddl", f"{benchmarks_basedir}/{domain_name}/p01.pddl")))
+
+    #domain_validities = [(domain_name, get_validity_code(f"{benchmarks_basedir}/{domain_name}/domain.pddl", f"{benchmarks_basedir}/{domain_name}/p01.pddl")) for domain_name in domain_names]
     
     for domain, validity in domain_validities:
         print(f"{validity:02} - {domain}")
@@ -29,8 +43,8 @@ def generate_valid_test_cases(benchmarks_basedir: str) -> list[TestCase]:
     test_cases = [
         TestCase(
             f"{domain_name}_{pnum:02}",
-            f"{benchmarks_basedir}/{domain_name}/domain.pddl",
-            f"{benchmarks_basedir}/{domain_name}/p{pnum:02}.pddl",
+            os.path.join(benchmarks_basedir, domain_name, "domain.pddl") if os.path.isfile(os.path.join(benchmarks_basedir, domain_name, "domain.pddl")) else os.path.join(benchmarks_basedir, domain_name, f"domain-p{pnum:02}.pddl"),
+            os.path.join(benchmarks_basedir, domain_name, f"p{pnum:02}.pddl"),
         ) 
         for domain_name in valid_domains
         for pnum in p_range
@@ -64,7 +78,7 @@ translators: list[BaseTranslator] = [
         # TapaalColorSearcher(engine_path_1safe, "randomwalk_1000_0", sample_count, ["--search-strategy", "RandomWalk", "1000", "0", "--xml-queries", "1", "--trace"]),
     ]),
     GroundedTranslator(translation_count, [
-        TapaalSearcher(engine_path_1safe, "rpfs", sample_count, ["--search-strategy", "RPFS", "--xml-queries", "1", "--trace"]),
+        TapaalSearcher(engine_path, "rpfs", sample_count, ["--search-strategy", "RPFS", "--xml-queries", "1", "--trace"]),
         # TapaalSearcher(engine_path_1safe, "no_color_optimizations", sample_count, ["--search-strategy", "RPFS", "--xml-queries", "1", "--disable-partitioning", "-D", "0", "--trace"]),
         # TapaalSearcher(engine_path_1safe, "randomwalk_1000_0", sample_count, ["--search-strategy", "Randomwalk", "1000", "0", "--xml-queries", "1", "--trace"]),
     ]),
