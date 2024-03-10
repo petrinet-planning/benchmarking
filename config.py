@@ -3,6 +3,7 @@ import os.path
 from test_runner import TestCase
 from test_runner.test_validity import get_validity_code
 from test_runner.translators import *
+import time
 
 
 def generate_valid_test_cases(benchmarks_basedir: str) -> list[TestCase]:
@@ -23,19 +24,24 @@ def generate_valid_test_cases(benchmarks_basedir: str) -> list[TestCase]:
     #                 "organic-split-synthesis", "parcprinter", "parking", "pathways", "pegsol", "pipesworld-notankage", "pipesworld-tankage", 
     #                 "rovers", "scanalyzer", "snake", "sokoban", "storage", "termes", "tetris", "thoughtful", "tidybot", "tpp", "visitall",
     #                 "woodworking", "zenotravel"]
-    p_range = range(1, 20)
+    p_range = range(1, 31)
 
     domain_validities = []
-    for domain_name in domain_names:
-        if os.path.isfile(os.path.join(benchmarks_basedir, domain_name, "domain.pddl")):
-            domain_validities.append((domain_name, get_validity_code(f"{benchmarks_basedir}/{domain_name}/domain.pddl", f"{benchmarks_basedir}/{domain_name}/p01.pddl")))
-        else:
-            domain_validities.append((domain_name, get_validity_code(f"{benchmarks_basedir}/{domain_name}/domain-p01.pddl", f"{benchmarks_basedir}/{domain_name}/p01.pddl")))
 
-    #domain_validities = [(domain_name, get_validity_code(f"{benchmarks_basedir}/{domain_name}/domain.pddl", f"{benchmarks_basedir}/{domain_name}/p01.pddl")) for domain_name in domain_names]
-    
-    for domain, validity in domain_validities:
-        print(f"{validity:02} - {domain}")
+    for domain_name in domain_names:
+        #print(f"Checking {domain_name}...")
+        start_time = time.time()
+        
+        if os.path.isfile(os.path.join(benchmarks_basedir, domain_name, "domain.pddl")):
+            validity = get_validity_code(f"{benchmarks_basedir}/{domain_name}/domain.pddl", f"{benchmarks_basedir}/{domain_name}/p01.pddl")
+        else:
+            validity = get_validity_code(f"{benchmarks_basedir}/{domain_name}/domain-p01.pddl", f"{benchmarks_basedir}/{domain_name}/p01.pddl")
+        
+        end_time = time.time()
+        elapsed_time = end_time - start_time
+        print(f"{validity:02} - {domain_name}, {elapsed_time:.2f} seconds")
+
+        domain_validities.append((domain_name, validity))
 
 
     valid_domains = [domain_name for (domain_name, validity) in domain_validities if validity == 0]
