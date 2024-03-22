@@ -20,13 +20,13 @@ def parse(translators: list[BaseTranslator], test_cases: list[TestCase]):
         translator_results[translator] = translator.parse_results(test_cases)
         search_results[translator] = translator.parse_search_results(test_cases)
 
-    return False
-#    os.makedirs(results_path, exist_ok=True)
-#    with open(os.path.join(results_path, f"translator_results.pickle"), "wb") as f:
-#        pickle.dump(translator_results, f)
-#
-#    with open(os.path.join(results_path, f"search_results.pickle"), "wb") as f:
-#        pickle.dump(search_results, f)
+    # return False
+    os.makedirs(results_path, exist_ok=True)
+    with open(os.path.join(results_path, f"translator_results.pickle"), "wb") as f:
+        pickle.dump(translator_results, f)
+
+    with open(os.path.join(results_path, f"search_results.pickle"), "wb") as f:
+        pickle.dump(search_results, f)
 
 
 def load_translator_results() -> translator_result_type:

@@ -44,6 +44,13 @@ regexes: dict[str, tuple[re.Pattern, type]] = {
     "time_verification": (re.compile(r"^Spent (\d+(?:\.\d+)?) on verification", re.MULTILINE), float),
 }
 
+
+# Trace found?
+trace_keywords_found_regex = re.compile(r"^Query is satisfied.\r?\nTrace:\r?\n<trace>", re.MULTILINE)
+
+# Concrete structural reductions applied:
+rule_application_regex = re.compile(r"^Applications of rule (\w+): (\d+)", re.MULTILINE)
+
 class TapaalResult(SearchResult):
     plan: Plan
 
@@ -75,6 +82,11 @@ class TapaalResult(SearchResult):
     transition_count_before_reduction: int
     transition_count_after_reduction: int
 
+    reductions_applied: dict[str, int]
+
+    # Trace found?
+    trace_keywords_found: str
+
     # Time
     time_query_reduction: float
     time_color_structural_reduction: float
@@ -94,7 +106,12 @@ class TapaalResult(SearchResult):
             else:
                 self[name] = expected_type(found_value[1])
 
-        self["has_plan"] = self.get("time_verification") != None
+        self.reductions_applied = dict()
+        for reduction in rule_application_regex.findall(file_content):
+            self.reductions_applied[reduction[0]] = int(reduction[1]) # First template = ruleID, second template = number of applications
+        
+
+        self["has_plan"] = trace_keywords_found_regex.match(file_content) != None
 
         if self["has_plan"]:
             self.plan = self.parse_grounded_trace(file_content, test_case.domain_path)
