@@ -14,14 +14,14 @@ time_regexes: dict[str, re.Pattern] = {
 class BaseResult(object):
     time: TimeMeasurement
 
-    def parse(self, result_file_path: str, print_unfound_keys: bool = False) -> Optional["BaseResult"]:
+    def parse(self, result_file_path: str, test_case: "TestCase", print_unfound_keys: bool = False) -> Optional["BaseResult"]:
         with open(result_file_path, "r") as result_file:
             filecontent = "".join(result_file.readlines())
-            self.parse_result(filecontent)
+            self.parse_result(filecontent, test_case)
             self.parse_time(filecontent)
         return self
 
-    def parse_result(self, file_content: str, print_unfound_keys: bool = False) -> None:
+    def parse_result(self, file_content: str, test_case: "TestCase", print_unfound_keys: bool = False) -> None:
         pass
 
     def parse_time(self, file_content: str) -> None:

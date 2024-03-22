@@ -11,13 +11,21 @@ def reorder_plan(cpn_plan: Plan, pddl_domain_path: str):
     ordered_actions: [PlanAction] = []
     reader = PDDLReader()
     domain = reader.parse_problem(pddl_domain_path)
+
+    saved_actions: dict[str, list] = {action.name: action.parameters for action in domain.actions}
     for action in cpn_plan.actions:
-        for domain_action in domain.actions:
-            if action.action_name == domain_action.name:
-                parameters: dict[str, str] = dict()
-                for param in domain_action.parameters:
-                    parameters[param.name] = action.parameters.get(param.name) 
-                ordered_actions.append(PlanAction(domain_action.name, parameters))
+        parameters: dict[str, str] = dict()
+        for param in saved_actions[action.action_name]:
+            parameters[param.name] = action.parameters.get(param.name)
+        ordered_actions.append(PlanAction(action.action_name, parameters))
+
+    # for action in cpn_plan.actions:
+    #     for domain_action in domain.actions:
+    #         if action.action_name == domain_action.name:
+    #             parameters: dict[str, str] = dict()
+    #             for param in domain_action.parameters:
+    #                 parameters[param.name] = action.parameters.get(param.name) 
+    #             ordered_actions.append(PlanAction(domain_action.name, parameters))
 
     return Plan(ordered_actions)
 
