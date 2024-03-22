@@ -2,6 +2,7 @@ import re
 
 from .tapaal_result import TapaalResult
 from .plan import Plan, PlanAction
+from .validate_trace import validate_plan
 
 
 transition_meta_data_finder_regex = re.compile(r"transitionVars\[[^]]+\] = \{[^\}]+\}", flags=re.MULTILINE)
@@ -53,13 +54,16 @@ class _Plan_Generator(object):
 
 
 class TapaalColoredResult(TapaalResult):
+    plan: Plan
+    validation_result: (bool, str)
 
-    def parse_result(self, file_content: str, print_unfound_keys: bool = False) -> "TapaalResult":
+    def parse_result(self, file_content: str, test_case: "TestCase", print_unfound_keys: bool = False) -> "TapaalResult":
         TapaalResult.parse_result(self, file_content, print_unfound_keys)
 
         if self["has_plan"]:
             plan_generator = _Plan_Generator()
             self.plan = plan_generator.parse_tapaal_output(file_content)
+            self.validation_result = validate_plan(self.plan, test_case.pddl_domain_path, test_case.pddl_problem_path, ordered=False)
 
         return self
     

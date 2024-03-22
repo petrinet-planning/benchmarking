@@ -1,7 +1,8 @@
 import re
 
 from .search_result import SearchResult
-from .plan import Plan
+from .plan import Plan, PlanAction
+from unified_planning.io import PDDLReader
 
 regexes: dict[str, tuple[re.Pattern, type]] = {
     # Parameters
@@ -96,7 +97,7 @@ class TapaalResult(SearchResult):
     time_potency: float
     time_verification: float
 
-    def parse_result(self, file_content: str, print_unfound_keys: bool = False) -> "TapaalResult":
+    def parse_result(self, file_content: str, test_case: "TestCase", print_unfound_keys: bool = False) -> "TapaalResult":
         for name, (regex, expected_type) in regexes.items():
             found_value = regex.search(file_content)
             if found_value is None:
@@ -112,4 +113,29 @@ class TapaalResult(SearchResult):
 
         self["has_plan"] = trace_keywords_found_regex.match(file_content) != None
 
+        if self["has_plan"]:
+            self.plan = self.parse_grounded_trace(file_content, test_case.domain_path)
+
         return self
+
+    def parse_grounded_trace(self, file_content: str, domain_path: str) -> Plan:
+        reader = PDDLReader()
+        domain = reader.parse_problem(domain_path)
+
+        plan_actions = []
+        saved_actions: dict[str, list] = {action.name: action.parameters for action in domain.actions}
+        
+        for line in file_content.split('\n'):
+            match = re.match(r'<transition id="([^"]*)"', line)
+
+            if match:
+                parameters: dict[str, str] = dict()
+                parts = match.group(1).split()
+                action, param_vals = parts[0], parts[1:]
+
+                for i, param in enumerate(saved_actions[action]):
+                    parameters[param.name] = param_vals[i]
+                    
+                plan_actions.append(PlanAction(action, parameters))
+
+        return Plan(plan_actions)

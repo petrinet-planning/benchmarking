@@ -34,7 +34,7 @@ class BaseSearcher(object):
 
 
     def parse_results(self, translator: "BaseTranslator",  test_case: "TestCase") -> list["SearchResult"]:
-        return [self.parser().parse(result_path) for result_path in self.get_result_paths(translator, test_case)]
+        return [self.parser().parse(result_path, test_case) for result_path in self.get_result_paths(translator, test_case)]
 
 
     def _generate_search_script_content_base(self, translator: BaseTranslator, test_case: TestCase) -> str:

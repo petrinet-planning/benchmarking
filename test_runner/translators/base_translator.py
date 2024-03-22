@@ -86,7 +86,7 @@ ulimit -v $m
         results: dict["TestCase", list[TranslatorResult]] = dict()
 
         for case in test_cases:
-            results[case] = [TranslatorResult().parse(result_path) for result_path in self.get_result_paths(case)]
+            results[case] = [TranslatorResult().parse(result_path, case) for result_path in self.get_result_paths(case)]
         
         return results
 
