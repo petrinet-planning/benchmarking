@@ -44,7 +44,8 @@ class DownwardSearchResult(SearchResult):
             else:
                 self[name] = expected_type(found_value[1])
         
-        if self["has_plan"]:
+        self.has_plan = self["has_plan"]
+        if self.has_plan:
             self.plan = parse_sas_plan(test_case.pddl_domain_path)
             
 

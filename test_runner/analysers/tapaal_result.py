@@ -46,7 +46,7 @@ regexes: dict[str, tuple[re.Pattern, type]] = {
 
 
 # Trace found?
-trace_keywords_found_regex = re.compile(r"^Query is satisfied.\r?\nTrace:\r?\n<trace>", re.MULTILINE)
+trace_keywords_found_regex = re.compile(r"^Query is satisfied\.\r?\nTrace:\r?\n<trace>", re.MULTILINE)
 
 # Concrete structural reductions applied:
 rule_application_regex = re.compile(r"^Applications of rule (\w+): (\d+)", re.MULTILINE)
@@ -111,9 +111,9 @@ class TapaalResult(SearchResult):
             self.reductions_applied[reduction[0]] = int(reduction[1]) # First template = ruleID, second template = number of applications
         
 
-        self["has_plan"] = trace_keywords_found_regex.match(file_content) != None
+        self.has_plan = trace_keywords_found_regex.search(file_content) != None
 
-        if self["has_plan"]:
+        if self.has_plan:
             self.plan = self.parse_grounded_trace(file_content, test_case.domain_path)
 
         return self

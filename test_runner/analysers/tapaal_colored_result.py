@@ -58,12 +58,12 @@ class TapaalColoredResult(TapaalResult):
     validation_result: (bool, str)
 
     def parse_result(self, file_content: str, test_case: "TestCase", print_unfound_keys: bool = False) -> "TapaalResult":
-        TapaalResult.parse_result(self, file_content, print_unfound_keys)
+        TapaalResult.parse_result(self, file_content, test_case, print_unfound_keys)
 
-        if self["has_plan"]:
+        if self.has_plan:
             plan_generator = _Plan_Generator()
             self.plan = plan_generator.parse_tapaal_output(file_content)
-            self.validation_result = validate_plan(self.plan, test_case.pddl_domain_path, test_case.pddl_problem_path, ordered=False)
+            self.validation_result = validate_plan(self.plan, test_case.domain_path, test_case.problem_path, ordered=False)
 
         return self
     
