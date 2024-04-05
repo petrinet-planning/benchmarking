@@ -10,8 +10,9 @@ regexes: dict[str, tuple[re.Pattern, type]] = {
     "has_plan": (re.compile(r"^(Solution found\.)", re.MULTILINE), str),
 }
 
-def parse_sas_plan(domain_path: str):
-    with open("sas_plan", "r") as file:
+def parse_sas_plan(domain_path: str, case_name: str):
+    folder_name = f"experiments/downward/{case_name}/sas_plan"
+    with open(folder_name, "r") as file:
         lines = [re.sub(r"[()]", "", line).strip() for line in file.readlines() if not line.startswith(';')]
         reader = PDDLReader()
         domain = reader.parse_problem(domain_path)
@@ -46,7 +47,7 @@ class DownwardSearchResult(SearchResult):
         
         self.has_plan = self["has_plan"]
         if self.has_plan:
-            self.plan = parse_sas_plan(test_case.pddl_domain_path)
+            self.plan = parse_sas_plan(test_case.domain_path, test_case.name)
             
 
         return self
