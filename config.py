@@ -70,16 +70,26 @@ engine_path_1safe = "/nfs/home/student.aau.dk/hginne19/P9/benchmarking/test_runn
 downward_path = "./test_runner/systems/downward/fast-downward.py"
 
 translation_count = 1
-sample_count = 2
+
+## -p, --disable-partial-order          Disable partial order reduction (stubborn sets)
+# 0 interval
+# -r 3 2,3,4,6,8,11,12
+
+safe_reductions_only = ["--disable-partial-order"] + ["-r", "3", "2,3,4,6,8,11,12"]
+unlimited_intervals = ["--max-intervals", "0", "0"]
 
 translators: list[BaseTranslator] = [
     LiftedTranslator(translation_count, [
         TapaalColorSearcher(engine_path_1safe, "rpfs", sample_count, ["--search-strategy", "RPFS", "--xml-queries", "1", "--trace"]),
-        # TapaalColorSearcher(engine_path_1safe, "no_color_optimizations", sample_count, ["--search-strategy", "RPFS", "--xml-queries", "1", "--disable-partitioning", "-D", "0", "--trace"]),
-        # TapaalColorSearcher(engine_path_1safe, "randomwalk_1000_0", sample_count, ["--search-strategy", "RandomWalk", "1000", "0", "--xml-queries", "1", "--trace"]),
+        TapaalColorSearcher(engine_path_1safe, "rpfs_safe_reductions", sample_count, ["--search-strategy", "RPFS", "--xml-queries", "1", "--trace"] + safe_reductions_only),
+        TapaalColorSearcher(engine_path_1safe, "rpfs_safe_reductions_unlimited_intervals", sample_count, ["--search-strategy", "RPFS", "--xml-queries", "1", "--trace"] + safe_reductions_only + unlimited_intervals)
+        TapaalColorSearcher(engine_path_1safe, "no_color_optimizations", sample_count, ["--search-strategy", "RPFS", "--xml-queries", "1", "--disable-partitioning", "-D", "0", "--trace"]),
+        TapaalColorSearcher(engine_path_1safe, "randomwalk_1000_0", sample_count, ["--search-strategy", "RandomWalk", "1000", "0", "--xml-queries", "1", "--trace"]),
     ]),
     LiftedHierarchyTranslator(translation_count, [
-        TapaalColorSearcher(engine_path_1safe, "rpfs", sample_count, ["--search-strategy", "RPFS", "--xml-queries", "1", "--trace"]),
+        # TapaalColorSearcher(engine_path_1safe, "rpfs", sample_count, ["--search-strategy", "RPFS", "--xml-queries", "1", "--trace"]),
+        TapaalColorSearcher(engine_path_1safe, "rpfs_safe_reductions", sample_count, ["--search-strategy", "RPFS", "--xml-queries", "1", "--trace"] + safe_reductions_only),
+        TapaalColorSearcher(engine_path_1safe, "rpfs_safe_reductions_unlimited_intervals", sample_count, ["--search-strategy", "RPFS", "--xml-queries", "1", "--trace"] + safe_reductions_only + unlimited_intervals)
         # TapaalColorSearcher(engine_path_1safe, "no_color_optimizations", sample_count, ["--search-strategy", "RPFS", "--xml-queries", "1", "--disable-partitioning", "-D", "0", "--trace"]),
         # TapaalColorSearcher(engine_path_1safe, "randomwalk_1000_0", sample_count, ["--search-strategy", "RandomWalk", "1000", "0", "--xml-queries", "1", "--trace"]),
     ]),
