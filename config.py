@@ -12,6 +12,8 @@ def generate_valid_test_cases(benchmarks_basedir: str) -> list[TestCase]:
     # Flat domains
     # domain_names = ["blocksworld", "childsnack", "ged", "miconic", "pegsol", "rovers", "scanalyzer", "visitall"]
 
+    domain_names = ["blocksworld"]
+
     # Flat domains after arc fix
     # domain_names = ["blocksworld", "childsnack", "ged", "miconic", "pegsol", "rovers", "scanalyzer", "visitall", "freecell", "grid", "gripper", "logistics"]
 
@@ -24,7 +26,7 @@ def generate_valid_test_cases(benchmarks_basedir: str) -> list[TestCase]:
     #                 "organic-split-synthesis", "parcprinter", "parking", "pathways", "pegsol", "pipesworld-notankage", "pipesworld-tankage", 
     #                 "rovers", "scanalyzer", "snake", "sokoban", "storage", "termes", "tetris", "thoughtful", "tidybot", "tpp", "visitall",
     #                 "woodworking", "zenotravel"]
-    p_range = range(1, 31)
+    p_range = range(1, 3)
 
     domain_validities = []
 
@@ -70,6 +72,7 @@ engine_path_1safe = "/nfs/home/student.aau.dk/hginne19/P9/benchmarking/test_runn
 downward_path = "./test_runner/systems/downward/fast-downward.py"
 
 translation_count = 1
+sample_count = 3
 
 ## -p, --disable-partial-order          Disable partial order reduction (stubborn sets)
 # 0 interval
@@ -80,21 +83,21 @@ unlimited_intervals = ["--max-intervals", "0", "0"]
 
 translators: list[BaseTranslator] = [
     LiftedTranslator(translation_count, [
-        TapaalColorSearcher(engine_path_1safe, "rpfs", sample_count, ["--search-strategy", "RPFS", "--xml-queries", "1", "--trace"]),
-        TapaalColorSearcher(engine_path_1safe, "rpfs_safe_reductions", sample_count, ["--search-strategy", "RPFS", "--xml-queries", "1", "--trace"] + safe_reductions_only),
-        TapaalColorSearcher(engine_path_1safe, "rpfs_safe_reductions_unlimited_intervals", sample_count, ["--search-strategy", "RPFS", "--xml-queries", "1", "--trace"] + safe_reductions_only + unlimited_intervals)
-        TapaalColorSearcher(engine_path_1safe, "no_color_optimizations", sample_count, ["--search-strategy", "RPFS", "--xml-queries", "1", "--disable-partitioning", "-D", "0", "--trace"]),
-        TapaalColorSearcher(engine_path_1safe, "randomwalk_1000_0", sample_count, ["--search-strategy", "RandomWalk", "1000", "0", "--xml-queries", "1", "--trace"]),
+       # TapaalColorSearcher(engine_path_1safe, "rpfs", sample_count, ["--search-strategy", "RPFS", "--xml-queries", "1", "--trace"]),
+        TapaalColorSearcher(engine_path_1safe, "rpfs_safe_reductions", sample_count, ["--search-strategy", "RPFS", "--xml-queries", "1", "-n"] + safe_reductions_only),
+        TapaalColorSearcher(engine_path_1safe, "rpfs_safe_reductions_unlimited_intervals", sample_count, ["--search-strategy", "RPFS", "--xml-queries", "1", "-n"] + safe_reductions_only + unlimited_intervals)
+       # TapaalColorSearcher(engine_path_1safe, "no_color_optimizations", sample_count, ["--search-strategy", "RPFS", "--xml-queries", "1", "--disable-partitioning", "-D", "0", "--trace"]),
+       # TapaalColorSearcher(engine_path_1safe, "randomwalk_1000_0", sample_count, ["--search-strategy", "RandomWalk", "1000", "0", "--xml-queries", "1", "--trace"]),
     ]),
     LiftedHierarchyTranslator(translation_count, [
         # TapaalColorSearcher(engine_path_1safe, "rpfs", sample_count, ["--search-strategy", "RPFS", "--xml-queries", "1", "--trace"]),
-        TapaalColorSearcher(engine_path_1safe, "rpfs_safe_reductions", sample_count, ["--search-strategy", "RPFS", "--xml-queries", "1", "--trace"] + safe_reductions_only),
-        TapaalColorSearcher(engine_path_1safe, "rpfs_safe_reductions_unlimited_intervals", sample_count, ["--search-strategy", "RPFS", "--xml-queries", "1", "--trace"] + safe_reductions_only + unlimited_intervals)
+        TapaalColorSearcher(engine_path_1safe, "rpfs_safe_reductions", sample_count, ["--search-strategy", "RPFS", "--xml-queries", "1", "-n"] + safe_reductions_only),
+        TapaalColorSearcher(engine_path_1safe, "rpfs_safe_reductions_unlimited_intervals", sample_count, ["--search-strategy", "RPFS", "--xml-queries", "1", "-n"] + safe_reductions_only + unlimited_intervals)
         # TapaalColorSearcher(engine_path_1safe, "no_color_optimizations", sample_count, ["--search-strategy", "RPFS", "--xml-queries", "1", "--disable-partitioning", "-D", "0", "--trace"]),
         # TapaalColorSearcher(engine_path_1safe, "randomwalk_1000_0", sample_count, ["--search-strategy", "RandomWalk", "1000", "0", "--xml-queries", "1", "--trace"]),
     ]),
     GroundedTranslator(translation_count, [
-        TapaalSearcher(engine_path, "rpfs", sample_count, ["--search-strategy", "RPFS", "--xml-queries", "1", "--trace"]),
+        TapaalSearcher(engine_path, "rpfs", sample_count, ["--search-strategy", "RPFS", "--xml-queries", "1", "-n"]),
         # TapaalSearcher(engine_path_1safe, "no_color_optimizations", sample_count, ["--search-strategy", "RPFS", "--xml-queries", "1", "--disable-partitioning", "-D", "0", "--trace"]),
         # TapaalSearcher(engine_path_1safe, "randomwalk_1000_0", sample_count, ["--search-strategy", "Randomwalk", "1000", "0", "--xml-queries", "1", "--trace"]),
     ]),
