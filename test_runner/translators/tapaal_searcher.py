@@ -1,6 +1,6 @@
 import os.path
 
-from ..analysers import TapaalResult
+from ..analysers import TapaalResult, TapaalSimpleResult
 from ..test_case import TestCase
 
 from . import *
@@ -8,12 +8,13 @@ from . import *
 class TapaalSearcher(BaseSearcher):
     parameters: list[str]
     engine_path: str
-    parser: TapaalResult = TapaalResult
+    parser: TapaalResult
 
 
-    def __init__(self, engine_path: str, name: str, sample_count: int, parameters: list[str] = []) -> None:
+    def __init__(self, engine_path: str, name: str, sample_count: int, parser, parameters: list[str] = []) -> None:
         super().__init__(name, sample_count)
         self.engine_path = engine_path
+        self.parser = parser
         self.parameters = parameters
 
 
