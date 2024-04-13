@@ -70,19 +70,24 @@ tests = all_valid_tests
 
 engine_path = "/nfs/home/student.aau.dk/hginne19/verifypn64"  # Cluster
 engine_path_1safe = "/nfs/home/student.aau.dk/hginne19/P9/benchmarking/test_runner/systems/verifypn/build/verifypn/bin/verifypn-linux64"  # Cluster
+engine_path_1safe_fast = "/home/seb/repos/newnew/benchmarking/verifypn-linux64" # Cluster, newer version, none of our bindings
 downward_path = "./test_runner/systems/downward/fast-downward.py"
 
+
 translation_count = 1
-sample_count = 1
+sample_count = 3
 fast_mode = True
 
 ## -p, --disable-partial-order          Disable partial order reduction (stubborn sets)
 # 0 interval
 # -r 3 2,3,4,6,8,11,12
 
+if fast_mode:
+    engine_path_1safe = engine_path_1safe_fast
+
 safe_reductions_only = ["--disable-partial-order"] + ["-r", "3", "2,3,4,6,8,11,12"]
 unlimited_intervals = ["--max-intervals", "0", "0"]
-fast_or_trace = ["--trace"] if not fast_mode else ["-n"]
+fast_or_trace = ["--trace"] if not fast_mode else []
 color_result_type = TapaalColoredResult if not fast_mode else TapaalSimpleResult
 grounded_result_type = TapaalResult if not fast_mode else TapaalSimpleResult
 
