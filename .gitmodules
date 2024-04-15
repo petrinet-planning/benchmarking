@@ -26,3 +26,7 @@
 	path = test_runner/systems/colored_translation_hierarchy
 	url = git@github.com:petrinet-planning/colored-lifted-planning.git
 	branch = TypeHierarchy
+[submodule "colored_hierarchy_v2"]
+	path = test_runner/systems/type_hierarchy_v2
+	url = git@github.com:petrinet-planning/colored-lifted-planning.git
+	branch = TypeHierarchyV2
