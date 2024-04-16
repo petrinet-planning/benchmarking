@@ -106,6 +106,10 @@ translators: list[BaseTranslator] = [
         # TapaalColorSearcher(engine_path_1safe, "no_color_optimizations", sample_count, ["--search-strategy", "RPFS", "--xml-queries", "1", "--disable-partitioning", "-D", "0", "--trace"]),
         # TapaalColorSearcher(engine_path_1safe, "randomwalk_1000_0", sample_count, ["--search-strategy", "RandomWalk", "1000", "0", "--xml-queries", "1", "--trace"]),
     ]),
+    LiftedHierarchyV2Translator(translation_count, [
+        TapaalColorSearcher(engine_path_1safe, "rpfs_safe_reductions", sample_count, color_result_type, ["--search-strategy", "RPFS", "--xml-queries", "1"] + fast_or_trace + safe_reductions_only),
+        TapaalColorSearcher(engine_path_1safe, "rpfs_safe_reductions_unlimited_intervals", sample_count, color_result_type, ["--search-strategy", "RPFS", "--xml-queries", "1"] + fast_or_trace + safe_reductions_only + unlimited_intervals)
+    ]),
     GroundedTranslator(translation_count, [
         TapaalSearcher(engine_path, "rpfs", sample_count, grounded_result_type, ["--search-strategy", "RPFS", "--xml-queries", "1"] + fast_or_trace),
         # TapaalSearcher(engine_path_1safe, "no_color_optimizations", sample_count, ["--search-strategy", "RPFS", "--xml-queries", "1", "--disable-partitioning", "-D", "0", "--trace"]),
