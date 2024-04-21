@@ -45,7 +45,7 @@ class DownwardSearchResult(SearchResult):
             else:
                 self[name] = expected_type(found_value[1])
         
-        self.has_plan = self["has_plan"]
+        self.has_plan = self.get("has_plan", False)
         if self.has_plan:
             self.plan = parse_sas_plan(test_case.domain_path, test_case.name)
             

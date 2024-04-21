@@ -13,7 +13,7 @@ def generate_valid_test_cases(benchmarks_basedir: str) -> list[TestCase]:
     # Flat domains
     # domain_names = ["blocksworld", "childsnack", "ged", "miconic", "pegsol", "rovers", "scanalyzer", "visitall"]
 
-    domain_names = ["blocksworld"]
+    domain_names = ["blocksworld", "depots", "logistics", "nomystery", "visitall"]
 
     # Flat domains after arc fix
     # domain_names = ["blocksworld", "childsnack", "ged", "miconic", "pegsol", "rovers", "scanalyzer", "visitall", "freecell", "grid", "gripper", "logistics"]
@@ -27,7 +27,7 @@ def generate_valid_test_cases(benchmarks_basedir: str) -> list[TestCase]:
     #                 "organic-split-synthesis", "parcprinter", "parking", "pathways", "pegsol", "pipesworld-notankage", "pipesworld-tankage", 
     #                 "rovers", "scanalyzer", "snake", "sokoban", "storage", "termes", "tetris", "thoughtful", "tidybot", "tpp", "visitall",
     #                 "woodworking", "zenotravel"]
-    p_range = range(1, 2)
+    p_range = range(1, 31)
 
     domain_validities = []
 
