@@ -70,7 +70,7 @@ tests = all_valid_tests
 
 engine_path = "/nfs/home/student.aau.dk/hginne19/verifypn64"  # Cluster
 engine_path_1safe = "/nfs/home/student.aau.dk/hginne19/P9/benchmarking/test_runner/systems/verifypn/build/verifypn/bin/verifypn-linux64"  # Cluster
-engine_path_1safe_fast = "/home/seb/repos/newnew/benchmarking/verifypn-linux64" # Cluster, newer version, none of our bindings
+engine_path_1safe_fast = "/nfs/home/student.aau.dk/slasse19/verifypn/build/verifypn/bin/verifypn-linux64" # Cluster, newer version, none of our bindings
 downward_path = "./test_runner/systems/downward/fast-downward.py"
 
 
