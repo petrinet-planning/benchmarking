@@ -11,3 +11,5 @@ bash build_verifypn.sh
 echo Building Val
 bash build_val.sh
 
+echo Building ENHSP
+bash build_enhsp.sh
