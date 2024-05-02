@@ -7,3 +7,4 @@ from .downward_search_result import DownwardSearchResult, parse_sas_plan
 from .tapaal_simple_result import TapaalSimpleResult
 from .plan import Plan, PlanAction
 from .validate_trace import reorder_plan, validate_plan
+from .enhsp_result import ENHSPResult

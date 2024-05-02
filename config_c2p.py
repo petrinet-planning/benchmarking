@@ -3,7 +3,7 @@ import os.path
 from test_runner import TestCase
 from test_runner.test_validity import get_validity_code
 from test_runner.translators import *
-from test_runner.analysers import TapaalColoredResult, TapaalResult, TapaalSimpleResult
+from test_runner.analysers import TapaalColoredResult, TapaalResult, TapaalSimpleResult, ENHSPResult
 import time
 
 
@@ -56,6 +56,7 @@ enhsp_path = "/nfs/home/student.aau.dk/slasse19/P9/benchmarking/test_runner/syst
 translation_count = 1
 sample_count = 3
 
+# TODO: Fix parameters
 translators: list[BaseTranslator] = [
     CPNTranslator(translation_count, [
         ENHSPSearcher(enhsp_path, "rpfs_safe_reductions", sample_count, color_result_type, ["--search-strategy", "RPFS", "--xml-queries", "1"])

@@ -11,3 +11,6 @@ from .grounded_translator import GroundedTranslator
 
 from .downward_translator import DownwardTranslator
 from .downward_searcher import DownwardSearcher
+
+from .cpn_translator import CPNTranslator
+from .enhsp_searcher import ENHSPSearcher
