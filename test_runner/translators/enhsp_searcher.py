@@ -1,6 +1,6 @@
 import os.path
 
-from ..analysers import CPNSearchResult
+from ..analysers import ENHSPResult
 from ..test_case import TestCase
 
 from . import *
@@ -8,7 +8,7 @@ from . import *
 class ENHSPSearcher(BaseSearcher):
     parameters: list[str]
     engine_path: str
-    parser: CPNSearchResult = CPNSearchResult
+    parser: ENHSPResult = ENHSPResult
 
     def __init__(self, engine_path: str, name: str, sample_count: int, parameters: list[str] = []) -> None:
         super().__init__(name, sample_count)
