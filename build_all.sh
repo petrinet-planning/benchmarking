@@ -13,3 +13,6 @@ bash build_val.sh
 
 echo Building ENHSP
 bash build_enhsp.sh
+
+echo Building Tapaal GUI
+bash build_tapaal_gui.sh

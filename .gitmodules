@@ -34,3 +34,6 @@
 	path = test_runner/systems/enhsp-20
 	url = https://gitlab.com/enricos83/ENHSP-Public.git
 	branch = enhsp-20
+[submodule "tapaal-gui"]
+	path = test_runner/systems/tapaal-gui
+	url = git@github.com:petrinet-planning/tapaal-gui.git
