@@ -30,6 +30,7 @@
 	path = test_runner/systems/type_hierarchy_v2
 	url = git@github.com:petrinet-planning/colored-lifted-planning.git
 	branch = TypeHierarchyV2
-[submodule "test_runner/systems/ENHSP-Public"]
-	path = test_runner/systems/ENHSP-Public
+[submodule "enhsp-20"]
+	path = test_runner/systems/enhsp-20
 	url = https://gitlab.com/enricos83/ENHSP-Public.git
+	branch = enhsp-20
