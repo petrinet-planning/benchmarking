@@ -169,6 +169,7 @@ out.csv
 out.xml
 results/*
 experiments/*
+experiments_c2p/*
 experiments_from_server/*
 run.sh
 results_old/*
