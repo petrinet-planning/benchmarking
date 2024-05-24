@@ -5,7 +5,7 @@ def make_init_runner_file(translators: list[BaseTranslator], test_cases: list[Te
     return f"""\
 #!/bin/bash
 
-{newline.join([f'(cd {translator.name}/{test.name}; sbatch run.sh)' for translator in translators for test in test_cases])}
+{newline.join([f'(cd "{translator.name}/{test.name}"; sbatch run.sh)' for translator in translators for test in test_cases])}
 
 """
 

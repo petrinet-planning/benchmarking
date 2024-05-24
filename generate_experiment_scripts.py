@@ -16,7 +16,7 @@ source $venv_path/bin/activate
 
 python3 -m pip install unified_planning
 
-{newline.join([f'(cd {translator.name}/{test.name}; sbatch run.sh)' for translator in translators for test in test_cases])}
+{newline.join([f'(cd "{translator.name}/{test.name}"; sbatch run.sh)' for translator in translators for test in test_cases])}
 
 """
 

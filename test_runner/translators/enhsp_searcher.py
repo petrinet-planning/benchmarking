@@ -32,9 +32,9 @@ class ENHSPSearcher(BaseSearcher):
 
         return f"""\
 $JAVA_HOME/bin/java -jar \
-{os.path.relpath(self.engine_path, translator_working_directory)} \
--o {os.path.relpath(modelPath, translator_working_directory)} \
--f {os.path.relpath(taskPath, translator_working_directory)} \
+"{os.path.relpath(self.engine_path, translator_working_directory)}" \
+-o "{os.path.relpath(modelPath, translator_working_directory)}" \
+-f "{os.path.relpath(taskPath, translator_working_directory)}" \
 {param_str} \
 """
     def get_result_path(self, translator: "BaseTranslator", test_case: "TestCase_c2p", iterator: int):
