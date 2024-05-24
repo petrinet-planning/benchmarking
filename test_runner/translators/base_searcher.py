@@ -10,6 +10,7 @@ class BaseSearcher(object):
     name: str
     sample_count: int
     parser: SearchResult = SearchResult
+    cluster_partition: str = "dhabi"
 
     def __init__(self, name: str, sample_count: int) -> None:
         self.name = name
@@ -43,7 +44,7 @@ class BaseSearcher(object):
 #SBATCH -J "{translator.name} - {test_case.name} - {self.name}"
 #SBATCH --mail-type=FAIL  # BEGIN,END,FAIL,ALL,NONE
 #SBATCH --mail-user=hginne19@student.aau.dk
-#SBATCH --partition=dhabi
+#SBATCH --partition={self.cluster_partition}
 #SBATCH --time=4:00:00
 #SBATCH --mem=16G
 

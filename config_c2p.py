@@ -52,6 +52,7 @@ verifypnPath = "/nfs/home/student.aau.dk/hginne19/verifypn64"  # Cluster
 
 translation_count = 1
 sample_count = 3
+cluster_partition = "naples"
 
 translators: list[BaseTranslator] = [
     DoNothingTranslator(translation_count, [
@@ -61,3 +62,8 @@ translators: list[BaseTranslator] = [
         ENHSPSearcher(enhsp_path, "CpnToEnhsp", sample_count, [])
     ])
 ]
+
+for translator in translators:
+    translator.cluster_partition = cluster_partition
+    for searcher in translator.searchers:
+        searcher.cluster_partition = cluster_partition

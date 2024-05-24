@@ -91,6 +91,8 @@ fast_or_trace = ["--trace"] if not fast_mode else []
 color_result_type = TapaalColoredResult if not fast_mode else TapaalSimpleResult
 grounded_result_type = TapaalResult if not fast_mode else TapaalSimpleResult
 
+cluster_partition = "dhabi"
+
 translators: list[BaseTranslator] = [
     LiftedTranslator(translation_count, [
        # TapaalColorSearcher(engine_path_1safe, "rpfs", sample_count, ["--search-strategy", "RPFS", "--xml-queries", "1", "--trace"]),
@@ -119,3 +121,8 @@ translators: list[BaseTranslator] = [
         DownwardSearcher(downward_path, "lama_first", sample_count, ["--alias", "lama-first"])
     ])    
 ]
+
+for translator in translators:
+    translator.cluster_partition = cluster_partition
+    for searcher in translator.searchers:
+        searcher.cluster_partition = cluster_partition

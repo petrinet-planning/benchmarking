@@ -12,6 +12,7 @@ class BaseTranslator(object):
     searchers: list["BaseSearcher"]
     base_dir: str = "./experiments/"
     parser: TranslatorResult = TranslatorResult
+    cluster_partition: str = "dhabi"
 
     def __init__(self, name: str, sample_count: int, searchers: list["BaseSearcher"]) -> None:
         self.name = name
@@ -64,7 +65,7 @@ class BaseTranslator(object):
 #SBATCH -J "{self.name} - {test_case.name} - translation"
 #SBATCH --mail-type=FAIL  # BEGIN,END,FAIL,ALL,NONE
 #SBATCH --mail-user=hginne19@student.aau.dk
-#SBATCH --partition=dhabi
+#SBATCH --partition={self.cluster_partition}
 #SBATCH --time=4:00:00
 #SBATCH --mem=16G
 
