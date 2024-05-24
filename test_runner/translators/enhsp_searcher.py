@@ -27,11 +27,11 @@ class ENHSPSearcher(BaseSearcher):
 
         param_str = "" if len(self.parameters)==0 else f'''"{'" "'.join(self.parameters)}"'''
 
-        modelPath = translator.get_model_path(test_case) # os.path.join(translator.get_translation_directory(test_case), "model.pddl")
-        taskPath = translator.get_query_path(test_case) # os.path.join(translator.get_translation_directory(test_case), "model.pddl")
+        modelPath = translator.get_model_path(test_case)
+        taskPath = translator.get_query_path(test_case)
 
         return f"""\
-java \
+$JAVA_HOME/bin/java -jar \
 {os.path.relpath(self.engine_path, translator_working_directory)} \
 -o {os.path.relpath(modelPath, translator_working_directory)} \
 -f {os.path.relpath(taskPath, translator_working_directory)} \

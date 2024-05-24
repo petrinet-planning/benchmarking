@@ -45,7 +45,7 @@ tests = all_valid_tests
 
 
 enhsp_path = os.path.abspath("test_runner/systems/enhsp-20/enhsp-dist/enhsp.jar")  # Cluster
-tapaal_gui_path = os.path.abspath("test_runner/systems/tapaal-gui/build/libs/TAPAAL-4.0-SNAPSHOT.jar")  # Cluster
+tapaal_gui_path = os.path.abspath("test_runner/systems/tapaal-gui/build/distributions/TAPAAL-4.0-SNAPSHOT/bin/TAPAAL")  # Cluster
 verifypnPath = "/nfs/home/student.aau.dk/hginne19/verifypn64"  # Cluster
 
 # tapaal_gui_path = os.path.abspath("./test_runner/systems/tapaal_gui/build/distributions/TAPAAL-4.0-SNAPSHOT/bin/TAPAAL")
