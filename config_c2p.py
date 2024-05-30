@@ -19,10 +19,14 @@ def generate_valid_test_cases(benchmarks_basedir: str) -> list[TestCase_c2p]:
         model_path = os.path.join(benchmarks_basedir, domain_name, "model.pnml")
         queries_path = os.path.join(benchmarks_basedir, domain_name, "ReachabilityCardinality.xml")
 
+        print("Verifying " + domain_name)
+
         validity: CpnBenchmarkValidity = CpnBenchmarkValidity(model_path, queries_path)
 
         if not validity.valid_domain:
             continue
+
+        print("Succesfully verified: " + domain_name)
 
         for query_id, query_name in validity.queries:
             test_cases.append(TestCase_c2p(
