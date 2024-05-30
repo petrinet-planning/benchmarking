@@ -26,7 +26,6 @@ def make_experiment_runner_file(translator: BaseTranslator, test_case: TestCase)
     return f"""\
 #!/bin/bash
 #SBATCH -J "{translator.name} - {test_case.name}"
-#SBATCH --partition=dhabi
 
 source /nfs/home/student.aau.dk/hginne19/slurm-dependencies.sh
 
