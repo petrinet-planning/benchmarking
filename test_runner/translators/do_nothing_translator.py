@@ -8,7 +8,7 @@ class DoNothingTranslator(BaseTranslator):
         super().__init__("nothing", sample_count, searches)
 
     def generate_translator_script_content(self, test_case: TestCase) -> str:
-        return "echo"
+        return self._generate_translator_script_content_prefix(test_case) + "time echo"
     
     def get_petrinet_path(self, test_case: TestCase):
         return test_case.domain_path

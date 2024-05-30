@@ -53,6 +53,7 @@ verifypnPath = "/nfs/home/student.aau.dk/hginne19/verifypn64"  # Cluster
 translation_count = 1
 sample_count = 3
 cluster_partition = "naples"
+base_dir = "./experiments_c2p"
 
 translators: list[BaseTranslator] = [
     DoNothingTranslator(translation_count, [
@@ -65,5 +66,6 @@ translators: list[BaseTranslator] = [
 
 for translator in translators:
     translator.cluster_partition = cluster_partition
+    translator.base_dir = base_dir
     for searcher in translator.searchers:
         searcher.cluster_partition = cluster_partition
