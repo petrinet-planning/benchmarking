@@ -1,6 +1,6 @@
 import re
 
-from .search_result import SearchResult
+from .search_result import QueryResultStatus, SearchResult
 from .plan import Plan, PlanAction
 from unified_planning.io import PDDLReader
 
@@ -42,6 +42,12 @@ regexes: dict[str, tuple[re.Pattern, type]] = {
     "time_structural_reduction": (re.compile(r"^Structural reduction finished after (\d+(?:\.\d+)?) seconds", re.MULTILINE), float),
     "time_potency": (re.compile(r"^Potency initialization finished after (\d+(?:\.\d+)?) seconds", re.MULTILINE), float),
     "time_verification": (re.compile(r"^Spent (\d+(?:\.\d+)?) on verification", re.MULTILINE), float),
+
+    # Status
+    "Query is satisfied.": (re.compile(r"^(Query is satisfied\.)", re.MULTILINE), str),
+    "Query is NOT satisfied.": (re.compile(r"^(Query is NOT satisfied\.)", re.MULTILINE), str),
+    "Query solved by Query Simplification.": (re.compile(r"^(Query solved by Query Simplification\.)", re.MULTILINE), str),
+    "OutOfMemory": (re.compile(r"(std::bad_alloc)", re.MULTILINE), str),
 }
 
 
@@ -110,6 +116,15 @@ class TapaalResult(SearchResult):
         for reduction in rule_application_regex.findall(file_content):
             self.reductions_applied[reduction[0]] = int(reduction[1]) # First template = ruleID, second template = number of applications
         
+
+        self.result_status = (
+            QueryResultStatus.satisfied if self.get("Query is satisfied.", False) else
+            QueryResultStatus.unsolvable if self.get("Query is NOT satisfied.", False) else 
+            QueryResultStatus.error if (
+                self.get("OutOfMemory", False)
+            ) else
+            QueryResultStatus.unknown
+        )
 
         self.has_plan = trace_keywords_found_regex.search(file_content) != None
 

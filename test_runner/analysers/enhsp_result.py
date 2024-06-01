@@ -1,6 +1,6 @@
 import re
 
-from .search_result import SearchResult
+from .search_result import QueryResultStatus, SearchResult
 from .plan import Plan, PlanAction
 from unified_planning.io import PDDLReader
 from ..test_case import TestCase
@@ -25,7 +25,7 @@ regexes: dict[str, tuple[re.Pattern, type]] = {
     "TranslationFailed": (re.compile(r"^(java.io.FileNotFoundException)", re.MULTILINE), str),
 
 
-    "Plan-Length:3": (re.compile(r"^Plan-Length: ?(\d+)", re.MULTILINE), int),
+    "Plan-Length": (re.compile(r"^Plan-Length: ?(\d+)", re.MULTILINE), int),
     "Metric (Search)": (re.compile(r"^Metric (Search): ?(\d+)", re.MULTILINE), float),
     "Planning Time (msec)": (re.compile(r"^Planning Time (msec):  ?(\d+)", re.MULTILINE), int),
     "Heuristic Time (msec)": (re.compile(r"^Heuristic Time (msec):  ?(\d+)", re.MULTILINE), int),
@@ -72,6 +72,18 @@ class ENHSPResult(SearchResult):
             else:
                 self[name] = expected_type(found_value[1])
         
+        self.result_status = (
+            QueryResultStatus.satisfied if self.get("has_plan", False) else
+            QueryResultStatus.unsolvable if self.get("Problem unsolvable", False) else 
+            QueryResultStatus.error if (
+                self.get("OutOfMemory", False) or 
+                self.get("StackOverflow", False) or 
+                self.get("SyntaxError", False) or 
+                self.get("TranslationFailed", False)
+            ) else
+            QueryResultStatus.unknown
+        )
+
         self.has_plan = self.get("has_plan", False)
         # if self.has_plan:
         #     self.plan = parse_sas_plan(test_case.domain_path, test_case.name)

@@ -7,10 +7,18 @@ from test_runner.analysers import TapaalColoredResult, TapaalResult, TapaalSimpl
 import time
 
 
+validQueryLogPath = "validQueries.log.ignored"
+open(validQueryLogPath, 'w').close() # Reset file
+def printToConsoleAndFile(msg):
+    with open(validQueryLogPath, 'a') as f:
+        f.write(msg+"\n")
+        print(msg)
+
 def generate_valid_test_cases(benchmarks_basedir: str) -> list[TestCase_c2p]:
     domain_names = os.listdir(benchmarks_basedir)
-    domain_names = ["SafeBus-COL-03"]
-    domain_names = ["SafeBus-COL-06"]
+    # domain_names = ["SafeBus-COL-03"]
+    # domain_names = ["SafeBus-COL-06"]
+    # domain_names = ["GlobalResAllocation-COL-03"]
 
 
     test_cases = []
@@ -19,16 +27,17 @@ def generate_valid_test_cases(benchmarks_basedir: str) -> list[TestCase_c2p]:
         model_path = os.path.join(benchmarks_basedir, domain_name, "model.pnml")
         queries_path = os.path.join(benchmarks_basedir, domain_name, "ReachabilityCardinality.xml")
 
-        print("Verifying " + domain_name)
+        printToConsoleAndFile("Verifying " + domain_name)
 
         validity: CpnBenchmarkValidity = CpnBenchmarkValidity(model_path, queries_path)
 
         if not validity.valid_domain:
             continue
 
-        print("Succesfully verified: " + domain_name)
+        printToConsoleAndFile("Succesfully verified: " + domain_name)
 
         for query_id, query_name in validity.queries:
+            printToConsoleAndFile(f"Valid Query:\t{domain_name}\t{query_id}\t{query_name}")
             test_cases.append(TestCase_c2p(
                 f"{domain_name} - {query_name}",
                 model_path,
