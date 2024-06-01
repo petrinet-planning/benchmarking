@@ -1,4 +1,5 @@
 import os.path
+import re
 
 from test_runner import TestCase_c2p
 from test_runner.test_validity_c2p import CpnBenchmarkValidity
@@ -8,13 +9,16 @@ import time
 
 
 validQueryLogPath = "validQueries.log.ignored"
-open(validQueryLogPath, 'w').close() # Reset file
-def printToConsoleAndFile(msg):
-    with open(validQueryLogPath, 'a') as f:
-        f.write(msg+"\n")
-        print(msg)
 
 def generate_valid_test_cases(benchmarks_basedir: str) -> list[TestCase_c2p]:
+
+    open(validQueryLogPath, 'w').close() # Reset file
+    def printToConsoleAndFile(msg):
+        with open(validQueryLogPath, 'a') as f:
+            f.write(msg+"\n")
+            print(msg)
+
+
     domain_names = os.listdir(benchmarks_basedir)
     # domain_names = ["SafeBus-COL-03"]
     # domain_names = ["SafeBus-COL-06"]
@@ -49,7 +53,28 @@ def generate_valid_test_cases(benchmarks_basedir: str) -> list[TestCase_c2p]:
     return test_cases
 
 
-all_valid_tests = generate_valid_test_cases("/nfs/home/cs.aau.dk/pgj/MCC/MCC2023-COL")
+def load_valid_test_cases(benchmarks_basedir: str) -> list[TestCase_c2p]:
+
+    with open(validQueryLogPath, "r") as logFile:
+        logText = logFile.read()
+
+    logParserRegex = re.compile(r"Valid Query:\t(?P<domain_name>[^\t]+)\t(?P<xmlId>[^\t]+)\t(?P<queryName>[^\t\r\n]+)")
+    
+    test_cases = []
+    for domain_name, query_id, query_name in logParserRegex.findall(logText):
+        model_path = os.path.join(benchmarks_basedir, domain_name, "model.pnml")
+        queries_path = os.path.join(benchmarks_basedir, domain_name, "ReachabilityCardinality.xml")
+        
+        test_cases.append(TestCase_c2p(
+            f"{domain_name} - {query_name}",
+            model_path,
+            queries_path,
+            query_id,
+            query_name
+        ))
+
+    return test_cases
+
 # all_valid_tests = generate_valid_test_cases("/mnt/c/Users/hginn/Downloads/Petri net benchmarks/MCC/MCC2023-COL")
 
 
