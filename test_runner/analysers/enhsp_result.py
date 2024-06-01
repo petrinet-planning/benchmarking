@@ -1,4 +1,5 @@
 import re
+from collections import Counter
 
 from .search_result import QueryResultStatus, SearchResult
 from .plan import Plan, PlanAction
@@ -6,7 +7,6 @@ from unified_planning.io import PDDLReader
 from ..test_case import TestCase
 from .validate_trace import validate_plan
 
-# TODO: change to suit output
 regexes: dict[str, tuple[re.Pattern, type]] = {
 
     # Reductions
@@ -34,34 +34,33 @@ regexes: dict[str, tuple[re.Pattern, type]] = {
     "States Evaluated": (re.compile(r"^States Evaluated: ?(\d+)", re.MULTILINE), int),
     "Number of Dead-Ends detected": (re.compile(r"^Number of Dead-Ends detected: ?(\d+)", re.MULTILINE), int),
     "Number of Duplicates detected": (re.compile(r"^Number of Duplicates detected: ?(\d+)", re.MULTILINE), int),
-    
 }
 
-def parse_sas_plan(domain_path: str, case_name: str):
-    folder_name = f"experiments/downward/{case_name}/sas_plan"
-    with open(folder_name, "r") as file:
-        lines = [re.sub(r"[()]", "", line).strip() for line in file.readlines() if not line.startswith(';')]
-        reader = PDDLReader()
-        domain = reader.parse_problem(domain_path)
+planRegex = re.compile(r"Found Plan:\r?\n(.+?\r?\n)\r?\n", re.MULTILINE)
+planLineRegex = re.compile(r"(?P<cost>\d+\.\d+): \((?P<action>[^ ]+) (?P<parameters>[^\)]+)\)")
+planParamRegex = re.compile(r"(?P<param>[^ ]+)")
 
-        plan_actions = []
-        saved_actions: dict[str, list] = {action.name: action.parameters for action in domain.actions}
-        for line in lines:
-            parameters: dict[str, str] = dict()
-            action, param_vals = line.split()[0], line.split()[1:]
-
-            i = 0
-            for param in saved_actions[action]:
-                parameters[param.name] = param_vals[i]
-                i += 1
-        
-            plan_actions.append(PlanAction(action, parameters))
-
-        return Plan(plan_actions)
 
 class ENHSPResult(SearchResult):
     plan: Plan
     validation_result: (bool, str)
+    plan_warning: bool
+
+    def parse_plan(self, file_content: str) -> Plan:
+
+        plan_text = re.compile(r"Found Plan:\r?\n([\s\S]+?\r?\n)\r?\n").search(file_content)[1]
+    
+        plan_actions: list[PlanAction] = []
+
+        for cost, action_name, params_txt in planLineRegex.findall(plan_text):
+            params = planParamRegex.findall(params_txt)
+            anyDuplicateParams = True if [x for x in Counter(params).values() if x > 1] else False
+            if anyDuplicateParams:
+                self.plan_warning = True
+
+            plan_actions.append(PlanAction(action_name, dict(zip(range(0,len(params)), params))))
+
+        return Plan(plan_actions)
 
     def parse_result(self, file_content: str, test_case: TestCase, print_unfound_keys: bool = False) -> "ENHSPResult":
         for name, (regex, expected_type) in regexes.items():
@@ -84,9 +83,10 @@ class ENHSPResult(SearchResult):
             QueryResultStatus.unknown
         )
 
-        self.has_plan = self.get("has_plan", False)
-        # if self.has_plan:
-        #     self.plan = parse_sas_plan(test_case.domain_path, test_case.name)
+        self.has_plan = True if self.get("has_plan", False) else False
+        self.plan_warning = False
+        if self.has_plan:
+            self.plan = self.parse_plan(file_content)
             
 
         return self
