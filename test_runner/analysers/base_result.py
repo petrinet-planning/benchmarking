@@ -12,7 +12,7 @@ time_regexes: dict[str, re.Pattern] = {
 
 timeout_regex = re.compile(r"(DUE TO TIME LIMIT \*\*\*$)", re.MULTILINE)
 
-class BaseResult(object):
+class BaseResult(dict):
     time: TimeMeasurement
     timed_out: bool
 

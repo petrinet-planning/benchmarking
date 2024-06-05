@@ -4,10 +4,12 @@ from ..test_case_c2p import TestCase_c2p
 
 from .base_translator import BaseTranslator
 from .enhsp_searcher import ENHSPSearcher
+from ..analysers import CpnToPddlTranslatorResult
 
 class CpnToPddlTranslator(BaseTranslator):
     translator_path: str
     _rel_pddl_out_dir: str = "out"
+    parser = CpnToPddlTranslatorResult
 
     def __init__(self, translator_path: str, sample_count: int, searches: list["ENHSPSearcher"] = []) -> None:
         super().__init__("cpn", sample_count, searches)

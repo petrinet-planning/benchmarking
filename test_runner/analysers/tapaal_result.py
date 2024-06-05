@@ -48,6 +48,7 @@ regexes: dict[str, tuple[re.Pattern, type]] = {
     "Query is NOT satisfied.": (re.compile(r"^(Query is NOT satisfied\.)", re.MULTILINE), str),
     "Query solved by Query Simplification.": (re.compile(r"^(Query solved by Query Simplification\.)", re.MULTILINE), str),
     "OutOfMemory": (re.compile(r"(std::bad_alloc)", re.MULTILINE), str),
+    "Marking could not be encoded": (re.compile(r"(ERROR: Marking could not be encoded)", re.MULTILINE), str),
 }
 
 
@@ -121,7 +122,8 @@ class TapaalResult(SearchResult):
             QueryResultStatus.satisfied if self.get("Query is satisfied.", False) else
             QueryResultStatus.unsolvable if self.get("Query is NOT satisfied.", False) else 
             QueryResultStatus.error if (
-                self.get("OutOfMemory", False)
+                self.get("OutOfMemory", False),
+                self.get("Marking could not be encoded", False)
             ) else
             QueryResultStatus.unknown
         )
