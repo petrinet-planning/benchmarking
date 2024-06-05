@@ -21,6 +21,7 @@ regexes: dict[str, tuple[re.Pattern, type]] = {
     "Problem unsolvable": (re.compile(r"^(Problem unsolvable)", re.MULTILINE), str),
     "OutOfMemory": (re.compile(r"^(Exception in thread \"main\" java.lang.OutOfMemoryError: Java heap space)", re.MULTILINE), str),
     "StackOverflow": (re.compile(r"^(Exception in thread \"main\" java.lang.StackOverflowError)", re.MULTILINE), str),
+    "NullPointerException": (re.compile(r"(java.lang.NullPointerException)", re.MULTILINE), str),
     "SyntaxError": (re.compile(r"((?:no viable alternative at input)|(?:^Some Syntax Error))", re.MULTILINE), str),
     "TranslationFailed": (re.compile(r"^(java.io.FileNotFoundException)", re.MULTILINE), str),
 
@@ -74,11 +75,13 @@ class ENHSPResult(SearchResult):
         self.result_status = (
             QueryResultStatus.satisfied if self.get("has_plan", False) else
             QueryResultStatus.unsolvable if self.get("Problem unsolvable", False) else 
+            QueryResultStatus.timeout if self.timed_out else
             QueryResultStatus.error if (
                 self.get("OutOfMemory", False) or 
                 self.get("StackOverflow", False) or 
                 self.get("SyntaxError", False) or 
-                self.get("TranslationFailed", False)
+                self.get("TranslationFailed", False) or
+                self.get("NullPointerException", False)
             ) else
             QueryResultStatus.unknown
         )

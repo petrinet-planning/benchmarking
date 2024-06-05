@@ -7,6 +7,7 @@ class QueryResultStatus(Enum):
     unsolvable = 2
     error = 3
     unknown = 4
+    timeout = 5
 
 class SearchResult(BaseResult, dict):
     has_plan: bool

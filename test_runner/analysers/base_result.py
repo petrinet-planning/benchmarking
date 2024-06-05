@@ -10,15 +10,17 @@ time_regexes: dict[str, re.Pattern] = {
     "sys": re.compile(r"^sys\t(\d+)m(\d+\.\d+)s", re.MULTILINE),
 }
 
+timeout_regex = re.compile(r"(DUE TO TIME LIMIT \*\*\*$)", re.MULTILINE)
 
 class BaseResult(object):
     time: TimeMeasurement
+    timed_out: bool
 
     def parse(self, result_file_path: str, test_case: "TestCase", print_unfound_keys: bool = False) -> Optional["BaseResult"]:
         with open(result_file_path, "r") as result_file:
             filecontent = "".join(result_file.readlines())
-            self.parse_result(filecontent, test_case)
             self.parse_time(filecontent)
+            self.parse_result(filecontent, test_case)
         return self
 
     def parse_result(self, file_content: str, test_case: "TestCase", print_unfound_keys: bool = False) -> None:
@@ -34,3 +36,5 @@ class BaseResult(object):
             (float(user[1]) * 60 + float(user[2])) if user is not None else float("inf"),
             (float(sys[1]) * 60 + float(sys[2]))   if sys is not None else float("inf")
         )
+
+        self.timed_out = True if timeout_regex.search(file_content) else False
