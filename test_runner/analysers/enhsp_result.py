@@ -21,7 +21,7 @@ regexes: dict[str, tuple[re.Pattern, type]] = {
     "Problem unsolvable": (re.compile(r"^(Problem unsolvable)", re.MULTILINE), str),
     "OutOfMemory": (re.compile(r"^(Exception in thread \"main\" java.lang.OutOfMemoryError: Java heap space)", re.MULTILINE), str),
     "StackOverflow": (re.compile(r"^(Exception in thread \"main\" java.lang.StackOverflowError)", re.MULTILINE), str),
-    "SyntaxError": (re.compile(r"^(no viable alternative at input)", re.MULTILINE), str),
+    "SyntaxError": (re.compile(r"((?:no viable alternative at input)|(?:^Some Syntax Error))", re.MULTILINE), str),
     "TranslationFailed": (re.compile(r"^(java.io.FileNotFoundException)", re.MULTILINE), str),
 
 
