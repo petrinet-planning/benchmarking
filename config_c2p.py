@@ -69,12 +69,16 @@ def load_valid_test_cases(benchmarks_basedir: str) -> list[TestCase_c2p]:
             f"{domain_name} - {query_name}",
             model_path,
             queries_path,
-            query_id,
+            int(query_id),
             query_name
         ))
 
     return test_cases
 
+
+
+# all_valid_tests = generate_valid_test_cases("/nfs/home/cs.aau.dk/pgj/MCC/MCC2023-COL")
+all_valid_tests = load_valid_test_cases("/mnt/c/Users/hginn/Documents/Petri net benchmarks/MCC/MCC2023-COL")
 # all_valid_tests = generate_valid_test_cases("/mnt/c/Users/hginn/Downloads/Petri net benchmarks/MCC/MCC2023-COL")
 
 
