@@ -168,6 +168,7 @@ query.xml
 out.csv
 out.xml
 results/*
+results_c2p/*
 experiments/*
 experiments_c2p/*
 experiments_from_server/*
